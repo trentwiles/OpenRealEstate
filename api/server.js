@@ -45,21 +45,21 @@ app.get("/random", async (req, res) => {
 
   var limit = req.query.q;
 
-  if(limit == null) {
-    limit = 1
+  if (limit == null) {
+    limit = 1;
   }
 
-  if(!Number.isInteger(limit)) {
-    console.log('not an integer')
-    limit = 1
+  if (!Number.isInteger(limit)) {
+    console.log("not an integer");
+    limit = 1;
   }
 
-  if(limit > 10){
-    console.log('more than 10')
-    limit = 10
+  if (limit > 10) {
+    console.log("more than 10");
+    limit = 10;
   }
 
-  console.log("Selecting " + limit)
+  console.log("Selecting " + limit);
 
   const data = conn.aggregate([{ $sample: { size: limit } }]);
 
@@ -71,6 +71,9 @@ app.get("/random", async (req, res) => {
 });
 
 app.post("/search", async (req, res) => {
+  /* EXTRACTING OUT THE SEARCH QUERY */
+
+  /* BUILDING THE SEARCH QUERY */
   const query = {};
   const options = {
     sort: { scrapedAt: -1 },
@@ -87,7 +90,27 @@ app.post("/search", async (req, res) => {
   res.json({ results: holder });
 });
 
-// Start the server and listen on port 3000
+app.get("/id", async (req, res) => {
+  const id = req.query.id;
+
+  if (!id) {
+    return res
+      .status(400)
+      .json({ error: true, status: "Missing ID parameter" });
+  }
+
+  const query = { id: id };
+
+  const options = {
+    sort: { scrapedAt: -1 },
+    limit: 1,
+  };
+
+  const conn = await init();
+  const data = await conn.find(query, options).toArray();
+  res.json({ results: data });
+});
+
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
 });
