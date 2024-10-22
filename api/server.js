@@ -7,6 +7,7 @@ dotenv.config();
 const MONGODB = `mongodb://${process.env.M_USERNAME}:${process.env.M_PASSWORD}@${process.env.M_SERVER}:27017/`;
 
 const app = express();
+app.use(express.json());
 
 async function rawInit() {
   const client = new MongoClient(MONGODB);
@@ -46,6 +47,22 @@ function timerangeParse(tre) {
   return [numberX, numberY];
 }
 
+function handleLimit(limit) {
+  if (limit == null || limit == "") {
+    limit = 1;
+  }
+
+  if (!Number.parseInt(limit)) {
+    limit = 1;
+  }
+
+  if (limit > 10) {
+    limit = 10;
+  }
+
+  return parseInt(limit)
+}
+
 function queryBuilder(urlParams) {
   query = {};
 
@@ -69,7 +86,7 @@ function queryBuilder(urlParams) {
   // state=MA
   // keep in mind zip is treated as a string
   if (isValid(urlParams.state)) {
-    query["streetAddressDetails.zip"] = {
+    query["streetAddressDetails.state"] = {
       $regex: urlParams.state,
       $options: "i",
     };
@@ -125,17 +142,7 @@ app.get("/random", async (req, res) => {
 
   var limit = req.query.limit;
 
-  if (limit == null || limit == "") {
-    limit = 1;
-  }
-
-  if (!Number.parseInt(limit)) {
-    limit = 1;
-  }
-
-  if (limit > 10) {
-    limit = 10;
-  }
+  limit = handleLimit(limit)
 
   console.log("Selecting " + limit);
 
@@ -146,48 +153,21 @@ app.get("/random", async (req, res) => {
   res.json({ results: data });
 });
 
+
 app.post("/search", async (req, res) => {
-  /* EXTRACTING OUT THE SEARCH QUERY */
-  var town = req.query.town;
-  var zip = req.query.zip;
 
   /* BUILDING THE SEARCH QUERY */
-  const query = {};
-  const options = {
-    sort: { scrapedAt: -1 },
-    limit: 10,
-  };
+  const query = queryBuilder(req.body)
+  const limit = handleLimit(req.body.limit)
+
+  console.log("query builder")
+  console.log(query)
 
   const conn = await init();
-  const data = conn.find(query, options);
+  const data = conn.find(query).sort({ scrapedAt: -1 }).limit(limit);
 
-  var holder = [];
 
-  await data.forEach((doc) => holder.push(doc));
-
-  res.json({ results: holder });
-});
-
-app.get("/test", async (req, res) => {
-  /* EXTRACTING OUT THE SEARCH QUERY */
-  var town = req.query.town;
-  var zip = req.query.zip;
-
-  /* BUILDING THE SEARCH QUERY */
-  const query = { streetAddress: { $regex: "City", $options: "i" } };
-  const options = {
-    sort: { scrapedAt: -1 },
-    limit: 1,
-  };
-
-  const conn = await init();
-  const data = conn.find(query, options);
-
-  var holder = [];
-
-  await data.forEach((doc) => holder.push(doc));
-
-  res.json({ results: holder });
+  res.json({ results: await data.toArray() });
 });
 
 app.get("/id", async (req, res) => {
