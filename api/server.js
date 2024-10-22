@@ -24,6 +24,86 @@ async function init() {
   return collection;
 }
 
+function isValid(param) {
+  return param != null && param != "";
+}
+
+function timerangeParse(tre) {
+  // should be inputted as NUMBER_X-NUMBER_Y
+  // where NUMBER_X < NUMBER_Y
+  // assumed to be non-null and non-blank, see queryBuilder function below
+  var split = tre.split("-");
+  if (split.length != 2) {
+    return null;
+  }
+
+  var numberX = split[0];
+  var numberY = split[1];
+
+  numberX = parseInt(numberX);
+  numberY = parseInt(numberY);
+
+  return [numberX, numberY];
+}
+
+function queryBuilder(urlParams) {
+  query = {};
+
+  // town=example
+  if (isValid(urlParams.town)) {
+    query["streetAddressDetails.town"] = {
+      $regex: urlParams.town,
+      $options: "i",
+    };
+  }
+
+  // zip=071884
+  // keep in mind zip is treated as a string
+  if (isValid(urlParams.zip)) {
+    query["streetAddressDetails.zip"] = {
+      $regex: urlParams.zip,
+      $options: "i",
+    };
+  }
+
+  // state=MA
+  // keep in mind zip is treated as a string
+  if (isValid(urlParams.state)) {
+    query["streetAddressDetails.zip"] = {
+      $regex: urlParams.state,
+      $options: "i",
+    };
+  }
+
+  //time="123-124"
+  if (isValid(urlParams.time)) {
+    var data = timerangeParse(urlParams.time);
+    if (data == null) {
+      throw new ValidityState("invalid time range, catch this later");
+    }
+    query["scrapedAt"] = { $gte: data[0], $lte: data[1] };
+  }
+
+  //marketValue="10000-40000"
+  if (isValid(urlParams.marketPriceRange)) {
+    var data = timerangeParse(urlParams.marketPriceRange);
+    if (data == null) {
+      throw new ValidityState("invalid market data range, catch this later");
+    }
+    query["marketValue"] = { $gte: data[0], $lte: data[1] };
+  }
+
+  // landUse=forrest
+  if (isValid(urlParams.landUse)) {
+    query["streetAddressDetails.landUse"] = {
+      $regex: urlParams.landUse,
+      $options: "i",
+    };
+  }
+
+  return query;
+}
+
 app.get("/", async (req, res) => {
   const expressVersion = require("express/package.json").version;
   const conn = await rawInit();
@@ -59,19 +139,45 @@ app.get("/random", async (req, res) => {
 
   console.log("Selecting " + limit);
 
-  const data = await conn.aggregate([{ $sample: { size: Number.parseInt(limit) } }]).toArray();
+  const data = await conn
+    .aggregate([{ $sample: { size: Number.parseInt(limit) } }])
+    .toArray();
 
   res.json({ results: data });
 });
 
 app.post("/search", async (req, res) => {
   /* EXTRACTING OUT THE SEARCH QUERY */
+  var town = req.query.town;
+  var zip = req.query.zip;
 
   /* BUILDING THE SEARCH QUERY */
   const query = {};
   const options = {
     sort: { scrapedAt: -1 },
     limit: 10,
+  };
+
+  const conn = await init();
+  const data = conn.find(query, options);
+
+  var holder = [];
+
+  await data.forEach((doc) => holder.push(doc));
+
+  res.json({ results: holder });
+});
+
+app.get("/test", async (req, res) => {
+  /* EXTRACTING OUT THE SEARCH QUERY */
+  var town = req.query.town;
+  var zip = req.query.zip;
+
+  /* BUILDING THE SEARCH QUERY */
+  const query = { streetAddress: { $regex: "City", $options: "i" } };
+  const options = {
+    sort: { scrapedAt: -1 },
+    limit: 1,
   };
 
   const conn = await init();
@@ -108,3 +214,5 @@ app.get("/id", async (req, res) => {
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
 });
+
+module.exports = { queryBuilder };
