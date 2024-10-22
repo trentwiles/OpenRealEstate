@@ -43,31 +43,25 @@ app.get("/", async (req, res) => {
 app.get("/random", async (req, res) => {
   const conn = await init();
 
-  var limit = req.query.q;
+  var limit = req.query.limit;
 
-  if (limit == null) {
+  if (limit == null || limit == "") {
     limit = 1;
   }
 
-  if (!Number.isInteger(limit)) {
-    console.log("not an integer");
+  if (!Number.parseInt(limit)) {
     limit = 1;
   }
 
   if (limit > 10) {
-    console.log("more than 10");
     limit = 10;
   }
 
   console.log("Selecting " + limit);
 
-  const data = conn.aggregate([{ $sample: { size: limit } }]);
+  const data = await conn.aggregate([{ $sample: { size: Number.parseInt(limit) } }]).toArray();
 
-  var holder = [];
-
-  await data.forEach((doc) => holder.push(doc));
-
-  res.json({ results: holder });
+  res.json({ results: data });
 });
 
 app.post("/search", async (req, res) => {
