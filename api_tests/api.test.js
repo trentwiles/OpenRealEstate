@@ -71,3 +71,53 @@ test("valid id request", async () => {
     http.data.results[0].id == "5b8a53b0-20e0-463a-8953-0d0d5a17f804"
   ).toBe(true);
 }, 20000);
+
+test("valid search, year range", async () => {
+  const http = await axios({
+    method: "post",
+    url: `${BASE_API_URL}/search`,
+    data: { yearBuilt: "2000-2000", limit: 1 },
+    headers: { Accept: "application/json" },
+  });
+
+  expect(http.status).toBe(200);
+  expect(http.data.results.length).toBe(1);
+  expect(http.data.results[0].yearBuilt == 2000).toBe(true);
+}, 20000);
+
+test("valid search, owner", async () => {
+  const http = await axios({
+    method: "post",
+    url: `${BASE_API_URL}/search`,
+    data: { owner: "smith", limit: 2 },
+    headers: { Accept: "application/json" },
+  });
+  expect(http.status).toBe(200);
+  expect(http.data.results.length).toBe(2);
+}, 20000);
+
+test("valid search, land use", async () => {
+  const http = await axios({
+    method: "POST",
+    url: "http://localhost:3000/search",
+    headers: { "content-type": "application/json" },
+    data: { landUse: "MANUFACTURED HOME" },
+  });
+  expect(http.status).toBe(200);
+  expect(http.data.results.length).toBe(4);
+  expect(
+    http.data.results[0].landUse.toLowerCase().includes("manufactured home")
+  ).toBe(true);
+}, 20000);
+
+test("valid search, taxes", async () => {
+  const http = await axios({
+    method: "post",
+    url: `${BASE_API_URL}/search`,
+    data: { taxRange: "0-10000", limit: 4 },
+    headers: { Accept: "application/json" },
+  });
+  expect(http.status).toBe(200);
+  expect(http.data.results.length).toBe(4);
+  expect(http.data.results[0].taxes > 10000).toBe(false);
+}, 20000);

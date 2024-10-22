@@ -1,6 +1,7 @@
 const express = require("express");
 const { MongoClient, Int32 } = require("mongodb");
 const dotenv = require("dotenv");
+var cors = require('cors')
 
 dotenv.config();
 
@@ -8,6 +9,7 @@ const MONGODB = `mongodb://${process.env.M_USERNAME}:${process.env.M_PASSWORD}@$
 
 const app = express();
 app.use(express.json());
+app.use(cors())
 
 async function rawInit() {
   const client = new MongoClient(MONGODB);
@@ -60,7 +62,7 @@ function handleLimit(limit) {
     limit = 10;
   }
 
-  return parseInt(limit)
+  return parseInt(limit);
 }
 
 function queryBuilder(urlParams) {
@@ -112,9 +114,47 @@ function queryBuilder(urlParams) {
 
   // landUse=forrest
   if (isValid(urlParams.landUse)) {
-    query["streetAddressDetails.landUse"] = {
+    query["landUse"] = {
       $regex: urlParams.landUse,
       $options: "i",
+    };
+  }
+
+  //taxes="1000-40000"
+  if (isValid(urlParams.taxes)) {
+    var data = timerangeParse(urlParams.taxes);
+    if (data == null) {
+      throw new ValidityState("invalid tax data range, catch this later");
+    }
+    query["taxes"] = { $gte: data[0], $lte: data[1] };
+  }
+
+  //landSize="1000-40000"
+  // in square meters
+  if (isValid(urlParams.landSize)) {
+    var data = timerangeParse(urlParams.landSize);
+    if (data == null) {
+      throw new ValidityState("invalid land size data range, catch this later");
+    }
+    query["landSize"] = { $gte: data[0], $lte: data[1] };
+  }
+
+  //year="2000-2010"
+  // in square meters
+  if (isValid(urlParams.yearBuilt)) {
+    var data = timerangeParse(urlParams.yearBuilt);
+    if (data == null) {
+      throw new ValidityState("invalid year data range, catch this later");
+    }
+    query["yearBuilt"] = { $gte: data[0], $lte: data[1] };
+  }
+
+  if (isValid(urlParams.owner)) {
+    // searches each fullName field under owner
+    query["owner"] = {
+      $elemMatch: {
+        $or: [{ fullName: { $regex: urlParams.owner, $options: "i" } }],
+      },
     };
   }
 
@@ -142,7 +182,7 @@ app.get("/random", async (req, res) => {
 
   var limit = req.query.limit;
 
-  limit = handleLimit(limit)
+  limit = handleLimit(limit);
 
   console.log("Selecting " + limit);
 
@@ -153,19 +193,16 @@ app.get("/random", async (req, res) => {
   res.json({ results: data });
 });
 
-
 app.post("/search", async (req, res) => {
-
   /* BUILDING THE SEARCH QUERY */
-  const query = queryBuilder(req.body)
-  const limit = handleLimit(req.body.limit)
+  const query = queryBuilder(req.body);
+  const limit = handleLimit(req.body.limit);
 
-  console.log("query builder")
-  console.log(query)
+  console.log("query builder");
+  console.log(query);
 
   const conn = await init();
   const data = conn.find(query).sort({ scrapedAt: -1 }).limit(limit);
-
 
   res.json({ results: await data.toArray() });
 });
