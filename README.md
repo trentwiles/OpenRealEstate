@@ -6,11 +6,12 @@
 
 ## API Docs
 
-| Paths        | Link                      |
-| ------------ | ------------------------- |
-| GET /        | [Documentation](#/)       |
-| POST /search | [Documentation](#/search) |
-| GET /id      | [Documentation](#/id)     |
+| Paths         | Link                        |
+| ------------- | --------------------------- |
+| GET /         | [Documentation](#/)         |
+| POST /search  | [Documentation](#/search)   |
+| GET /property | [Documentation](#/property) |
+| GET /random   | [Documentation](#/random)   |
 
 ### /
 
@@ -38,19 +39,19 @@ GET /
 Description: searches the real estate database for a search term(s)
 Parameters:
 
-| Parameter        | Description                                                                         | Optional? | Example                   |
-| ---------------- | ----------------------------------------------------------------------------------- | --------- | ------------------------- |
-| town             | Town a property is located in                                                       |           | `"Oakland"`               |
-| zip              | Zip code of a property                                                              |           | `94015`                   |
-| state            | US State abreviation of a property                                                  |           | `MN`                      |
-| time             | Epoch time when property was scraped (range)                                        |           | `"1729440645-1729640645"` |
-| marketPriceRange | Price of a property in USD (range)                                                  |           | `"100000-200000"`         |
-| landUse          | Description of how property is used (ie. home, vacant) (case unsensative match)     |           | `"Vacant"`                |
-| taxes            | Property tax paid by owner in last available year (range)                           |           | `"1000-5000"`             |
-| landSize         | Land size in square meters (range)                                                  |           | `"100-1000"`              |
-| yearBuilt        | What year construction of the property was completed                                |           | `"2015"`                  |
-| owner            | Name of the owner, could be a gov't, person, company, etc. (case unsensative match) |           | `"Johnson"`               |
-| limit            | Maximum number of results to return, 10 by default                                  |           | `8`                       |
+| Parameter        | Description                                                                         | Example                   |
+| ---------------- | ----------------------------------------------------------------------------------- | ------------------------- |
+| town             | Town a property is located in                                                       | `"Oakland"`               |
+| zip              | Zip code of a property                                                              | `94015`                   |
+| state            | US State abreviation of a property                                                  | `MN`                      |
+| time             | Epoch time when property was scraped (range)                                        | `"1729440645-1729640645"` |
+| marketPriceRange | Price of a property in USD (range)                                                  | `"100000-200000"`         |
+| landUse          | Description of how property is used (ie. home, vacant) (case unsensative match)     | `"Vacant"`                |
+| taxes            | Property tax paid by owner in last available year (range)                           | `"1000-5000"`             |
+| landSize         | Land size in square meters (range)                                                  | `"100-1000"`              |
+| yearBuilt        | What year construction of the property was completed                                | `"2015"`                  |
+| owner            | Name of the owner, could be a gov't, person, company, etc. (case unsensative match) | `"Johnson"`               |
+| limit            | Maximum number of results to return, 10 by default                                  | `8`                       |
 
 _Note: a request must contain at least one of the parameters above. A 400 error will be returned otherwise._
 
@@ -164,3 +165,124 @@ POST /search
   ]
 }
 ```
+
+### /property
+
+Description: search a property by internal ID
+Parameters:
+| Parameter | Description | Example |
+| ---------------- | ----------------------------------------------------------------------------------- | ------------------------- |
+| id | Internal UUID | `"cafa94cc-0ce3-4a24-8473-307e45acd925"` |
+
+Example:
+
+```
+GET /property?id=12586302-d60c-4fc9-a940-8e9526fa63e7
+
+{
+  "results": [
+    {
+      "_id": "671661fe28c055cb0533443b",
+      "owner": [
+        {
+          "fullName": "SCHMUCKER, JANNAKEN H",
+          "firstName": "JANNAKEN",
+          "middleName": "H",
+          "lastName": "SCHMUCKER"
+        }
+      ],
+      "yearBuilt": "1984",
+      "landSize": 2223.791821561338,
+      "streetAddressDetails": {
+        "town": "Harmony",
+        "state": "NC",
+        "zip": "28634"
+      },
+      "streetAddress": "214 Skyview Lake Rd, Harmony, NC 28634",
+      "marketValue": 39480,
+      "taxYear": "2023",
+      "taxes": 293,
+      "landUse": "MOBILE HOME (SINGLE WIDE)",
+      "verboseTransaction": {
+        "lastMarketSale": {
+          "pricePerArea": 1.20817843866171,
+          "value": 23500,
+          "seller": "U S BANK NATIONAL ASSOCIATION, ; THE CIM TRUST 2019 R2,",
+          "buyer": "SCHMUCKER, JANNAKEN H",
+          "filingDate": "2021-10-15T00:00:00.000Z",
+          "transferDate": "2021-10-15T00:00:00.000Z",
+          "documentNumber": null,
+          "documentTypeCode": "SW",
+          "documentTypeDescription": "SPECIAL WARRANTY DEED",
+          "lender": null,
+          "loan": {
+            "code": null,
+            "description": null,
+            "first": 0,
+            "second": 0
+          },
+          "sale": {
+            "code": "2",
+            "description": "FULL AMOUNT STATED ON DOCUMENT."
+          },
+          "titleCompany": "NONE AVAILABLE",
+          "tdDocumentNumber": null,
+          "deedTransactionType": "2",
+          "lenderType": null
+        },
+        "priorMarketSale": {
+          "transferDate": null,
+          "lender": ""
+        },
+        "multipleApnFlag": "2"
+      },
+      "assessmentVerbose": {
+        "alternateApn": null,
+        "apn": "4880-72-0120.000",
+        "assessedValue": {
+          "total": 39480,
+          "land": 16500,
+          "improvements": 22980,
+          "year": "2023"
+        },
+        "marketValue": {
+          "total": 39480,
+          "land": 16500,
+          "improvements": 22980,
+          "year": "2023"
+        },
+        "improvementPercent": 58.2,
+        "lot": {
+          "lotNumber": null,
+          "blockNumber": "72",
+          "depth": 0,
+          "width": 30.48,
+          "size": 2266.2416000000003
+        },
+        "poolIndicator": null,
+        "zoning": {
+          "assessment": "RA"
+        },
+        "book": null,
+        "page": null,
+        "avm": "179000"
+      },
+      "geoPolygon": {
+        "wkt": "POLYGON ((-80.7330227014574 35.9413053730385, -80.7326738815006 35.9413463479847, -80.7331354423624 35.9419379811794, -80.7334762696038 35.9419095266428, -80.7330227014574 35.9413053730385))"
+      },
+      "lightboxParcelID": "0205JTGBMUL64JFU55G8BO",
+      "id": "12586302-d60c-4fc9-a940-8e9526fa63e7",
+      "scrapedAt": 1729520126
+    }
+  ]
+}
+```
+
+### /random
+
+Description: get a random property
+
+Parameters:
+| Parameter | Description | Example |
+| ---------------- | ----------------------------------------------------------------------------------- | ------------------------- |
+| limit | Number of results to return (maximum of 10) | `5` |

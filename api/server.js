@@ -203,7 +203,7 @@ app.post("/search", async (req, res) => {
   res.json({ results: await data.toArray() });
 });
 
-app.get("/id", async (req, res) => {
+app.get("/property", async (req, res) => {
   const id = req.query.id;
 
   if (!id) {
