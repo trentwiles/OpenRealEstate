@@ -139,14 +139,10 @@ function queryBuilder(urlParams) {
     query["landSize"] = { $gte: data[0], $lte: data[1] };
   }
 
-  //year="2000-2010"
-  // in square meters
+  //year="2000"
   if (isValid(urlParams.yearBuilt)) {
-    var data = timerangeParse(urlParams.yearBuilt);
-    if (data == null) {
-      throw new ValidityState("invalid year data range, catch this later");
-    }
-    query["yearBuilt"] = { $gte: data[0], $lte: data[1] };
+    var yb = urlParams.yearBuilt
+    query["yearBuilt"] = yb;
   }
 
   if (isValid(urlParams.owner)) {
