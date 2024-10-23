@@ -38,15 +38,129 @@ GET /
 Description: searches the real estate database for a search term(s)
 Parameters:
 
-| Parameter        | Description                                                                     | Optional? | Example |
-| ---------------- | ------------------------------------------------------------------------------- | --------- | ------- |
-| town             | Town a property is located in                                                   |           |         |
-| zip              | Zip code of a property                                                          |           |         |
-| state            | US State abreviation of a property                                              |           |         |
-| time             | Epoch time when property was scraped (range)                                    |           |         |
-| marketPriceRange | Price of a property in USD (range)                                              |           |         |
-| landUse          | Description of how property is used (ie. home, vacant) (case unsensative match) |           |         |
-| taxes            | Epoch time when property was scraped                                            |           |         |
-| landSize         | Epoch time when property was scraped                                            |           |         |
-| yearBuilt        | Epoch time when property was scraped                                            |           |         |
-| owner            | Epoch time when property was scraped                                            |           |         |
+| Parameter        | Description                                                                         | Optional? | Example                   |
+| ---------------- | ----------------------------------------------------------------------------------- | --------- | ------------------------- |
+| town             | Town a property is located in                                                       |           | `"Oakland"`               |
+| zip              | Zip code of a property                                                              |           | `94015`                   |
+| state            | US State abreviation of a property                                                  |           | `MN`                      |
+| time             | Epoch time when property was scraped (range)                                        |           | `"1729440645-1729640645"` |
+| marketPriceRange | Price of a property in USD (range)                                                  |           | `"100000-200000"`         |
+| landUse          | Description of how property is used (ie. home, vacant) (case unsensative match)     |           | `"Vacant"`                |
+| taxes            | Property tax paid by owner in last available year (range)                           |           | `"1000-5000"`             |
+| landSize         | Land size in square meters (range)                                                  |           | `"100-1000"`              |
+| yearBuilt        | What year construction of the property was completed                                |           | `"2015"`                  |
+| owner            | Name of the owner, could be a gov't, person, company, etc. (case unsensative match) |           | `"Johnson"`               |
+| limit            | Maximum number of results to return, 10 by default                                  |           | `8`                       |
+
+_Note: a request must contain at least one of the parameters above. A 400 error will be returned otherwise._
+
+```
+POST /search
+{"state": "MA", "yearBuilt": "1990", "limit": 4}
+
+
+{
+  "results": [
+    {
+      "_id": "6716b9e056ac4729f23345af",
+      "owner": [
+        {
+          "fullName": "DOSSANTOS, DAIN",
+          "firstName": "DAIN",
+          "middleName": null,
+          "lastName": "DOSSANTOS"
+        },
+        {
+          "fullName": "DOSSANTOS, LISA",
+          "firstName": "LISA",
+          "middleName": null,
+          "lastName": "DOSSANTOS"
+        }
+      ],
+      "yearBuilt": "1990",
+      "landSize": 9847.955390334573,
+      "streetAddressDetails": {
+        "town": "Attleboro",
+        "state": "MA",
+        "zip": "02703"
+      },
+      "streetAddress": "474 Pike Ave, Attleboro, MA 02703",
+      "marketValue": null,
+      "taxYear": "2024",
+      "taxes": 6940,
+      "landUse": "1-FAMILY RESIDENCE",
+      "verboseTransaction": {
+        "lastMarketSale": {
+          "pricePerArea": 19.144981412639407,
+          "value": 385000,
+          "seller": "GINGRAS, PAMELA J",
+          "buyer": "DOSSANTOS, LISA; DOSSANTOS, DAIN",
+          "filingDate": "2007-08-13T00:00:00.000Z",
+          "transferDate": "2007-08-13T00:00:00.000Z",
+          "documentNumber": "39966",
+          "documentTypeCode": "DE",
+          "documentTypeDescription": "DEED",
+          "lender": "BANKBOSTON",
+          "loan": {
+            "code": null,
+            "description": null,
+            "first": 365750,
+            "second": 0
+          },
+          "sale": {
+            "code": "D",
+            "description": "FULL AMOUNT STATED ON DOCUMENT"
+          },
+          "titleCompany": null,
+          "tdDocumentNumber": null,
+          "deedTransactionType": "2",
+          "lenderType": null
+        },
+        "priorMarketSale": {
+          "transferDate": null,
+          "lender": "BANKBOSTON"
+        },
+        "multipleApnFlag": null
+      },
+      "assessmentVerbose": {
+        "alternateApn": null,
+        "apn": "ATTL M:123 L:26C",
+        "assessedValue": {
+          "total": 545200,
+          "land": 166000,
+          "improvements": 379200,
+          "year": "2024"
+        },
+        "marketValue": {
+          "total": null,
+          "land": null,
+          "improvements": null,
+          "year": null
+        },
+        "improvementPercent": 69.55,
+        "lot": {
+          "lotNumber": "26C",
+          "blockNumber": null,
+          "depth": 0,
+          "width": 0,
+          "size": 9510.121000000001
+        },
+        "poolIndicator": null,
+        "zoning": {
+          "assessment": "R1"
+        },
+        "book": null,
+        "page": null,
+        "avm": "688333"
+      },
+      "geoPolygon": {
+        "wkt": "POLYGON ((-71.2502803204144 41.9387706595702, -71.2478263941595 41.9395136159165, -71.2480242965772 41.9397092783677, -71.2483321435762 41.9399544107506, -71.2498771316927 41.9392475253938, -71.2505014410661 41.9390555942292, -71.2503770534419 41.9389114135517, -71.2502803204144 41.9387706595702))"
+      },
+      "lightboxParcelID": "0203O49SWWT5PWTQUMWXDD",
+      "id": "dbf7d616-7afa-4917-afc4-82bd639614cf",
+      "scrapedAt": 1729542625
+    },
+    ...
+  ]
+}
+```
