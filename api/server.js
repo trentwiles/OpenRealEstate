@@ -107,6 +107,8 @@ function queryBuilder(urlParams) {
     var data = timerangeParse(urlParams.time);
     if (data == null) {
       logger.warn("User passed invalid time range.");
+      return {"error": true, "message": "Invalid time"}
+      return -1;
     } else {
       query["scrapedAt"] = { $gte: data[0], $lte: data[1] };
     }
@@ -117,6 +119,8 @@ function queryBuilder(urlParams) {
     var data = timerangeParse(urlParams.marketPriceRange);
     if (data == null) {
       logger.warn("User passed invalid market value range.");
+      return {"error": true, "message": "Invalid marketPriceRange"}
+      return -1;
     } else {
       query["marketValue"] = { $gte: data[0], $lte: data[1] };
     }
@@ -135,6 +139,7 @@ function queryBuilder(urlParams) {
     var data = timerangeParse(urlParams.taxes);
     if (data == null) {
       logger.warn("User passed invalid tax range.");
+      return {"error": true, "message": "Invalid taxes"}
     } else {
       query["taxes"] = { $gte: data[0], $lte: data[1] };
     }
@@ -146,6 +151,7 @@ function queryBuilder(urlParams) {
     var data = timerangeParse(urlParams.landSize);
     if (data == null) {
       logger.warn("User passed invalid land size range.");
+      return {"error": true, "message": "Invalid landSize"}
     } else {
       query["landSize"] = { $gte: data[0], $lte: data[1] };
     }
@@ -208,6 +214,11 @@ app.get("/random", async (req, res) => {
 app.post("/search", async (req, res) => {
   /* BUILDING THE SEARCH QUERY */
   const query = queryBuilder(req.body);
+
+  if(query["error"] != null) {
+    return res.status(400).json(query)
+  }
+
   const limit = handleLimit(req.body.limit);
 
   const conn = await init();
