@@ -286,3 +286,106 @@ Parameters:
 | Parameter | Description | Example |
 | ---------------- | ----------------------------------------------------------------------------------- | ------------------------- |
 | limit | Number of results to return (maximum of 10) | `5` |
+
+```
+GET /random?limit=3
+
+{
+  "results": [
+    {
+      "_id": "67169a8eb427f84b2e33446d",
+      "owner": [
+        {
+          "fullName": "PALMER, DEBORAH A",
+          "firstName": "DEBORAH",
+          "middleName": "A",
+          "lastName": "PALMER"
+        }
+      ],
+      "yearBuilt": "2021",
+      "landSize": 33231.87732342008,
+      "streetAddressDetails": {
+        "town": "Robbins",
+        "state": "TN",
+        "zip": "37852"
+      },
+      "streetAddress": "1632 Chambers Rd, Robbins, TN 37852",
+      "marketValue": 181300,
+      "taxYear": null,
+      "taxes": null,
+      "landUse": "RESIDENTIAL IMPROVED SITE + MOBILE HOME",
+      "verboseTransaction": {
+        "lastMarketSale": {
+          "pricePerArea": 9.200743494423792,
+          "value": 199845,
+          "seller": "CMH HOMES INC,",
+          "buyer": "PALMER, DEBORAH A",
+          "filingDate": "2022-02-01T00:00:00.000Z",
+          "transferDate": "2022-02-01T00:00:00.000Z",
+          "documentNumber": "22000245",
+          "documentTypeCode": "SW",
+          "documentTypeDescription": "SPECIAL WARRANTY DEED",
+          "lender": null,
+          "loan": {
+            "code": "F",
+            "description": "FHA",
+            "first": 196224,
+            "second": 0
+          },
+          "sale": {
+            "code": "2",
+            "description": "FULL AMOUNT STATED ON DOCUMENT."
+          },
+          "titleCompany": null,
+          "tdDocumentNumber": "22000246",
+          "deedTransactionType": "9",
+          "lenderType": null
+        },
+        "priorMarketSale": {
+          "transferDate": null,
+          "lender": ""
+        },
+        "multipleApnFlag": null
+      },
+      "assessmentVerbose": {
+        "alternateApn": null,
+        "apn": "076103    04322",
+        "assessedValue": {
+          "total": 45325,
+          "land": 10150,
+          "improvements": 35175,
+          "year": "2023"
+        },
+        "marketValue": {
+          "total": 181300,
+          "land": 40600,
+          "improvements": 140700,
+          "year": "2023"
+        },
+        "improvementPercent": 77.6,
+        "lot": {
+          "lotNumber": "12",
+          "blockNumber": null,
+          "depth": 0,
+          "width": 0,
+          "size": 35248.15060000001
+        },
+        "poolIndicator": null,
+        "zoning": {
+          "assessment": null
+        },
+        "book": null,
+        "page": null,
+        "avm": "200000"
+      },
+      "geoPolygon": {
+        "wkt": "POLYGON ((-84.5540007859041 36.3751251330068, -84.5540455772402 36.3752716861829, -84.5541070292999 36.3754792505416, -84.5541297445721 36.3756758415856, -84.5541244564711 36.3758570603431, -84.5540923742572 36.3760667816543, -84.5580108691485 36.3763710362752, -84.5581178540739 36.3756314510571, -84.5540007859041 36.3751251330068))"
+      },
+      "lightboxParcelID": "0201UFJCWJLS9B5VXJE0DF",
+      "id": "0746b099-dfc3-48e3-b3af-628f4704259f",
+      "scrapedAt": 1729534606
+    },
+    ...
+  ]
+}
+```
