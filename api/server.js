@@ -1,15 +1,23 @@
 const express = require("express");
 const { MongoClient, Int32 } = require("mongodb");
 const dotenv = require("dotenv");
-var cors = require('cors')
+const winston = require("winston");
+const cors = require("cors");
 
 dotenv.config();
 
 const MONGODB = `mongodb://${process.env.M_USERNAME}:${process.env.M_PASSWORD}@${process.env.M_SERVER}:27017/`;
 
+const logger = winston.createLogger({
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: "combined.log" }),
+  ],
+});
+
 const app = express();
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 
 async function rawInit() {
   const client = new MongoClient(MONGODB);
@@ -98,18 +106,20 @@ function queryBuilder(urlParams) {
   if (isValid(urlParams.time)) {
     var data = timerangeParse(urlParams.time);
     if (data == null) {
-      throw new ValidityState("invalid time range, catch this later");
+      logger.warn("User passed invalid time range.");
+    } else {
+      query["scrapedAt"] = { $gte: data[0], $lte: data[1] };
     }
-    query["scrapedAt"] = { $gte: data[0], $lte: data[1] };
   }
 
   //marketValue="10000-40000"
   if (isValid(urlParams.marketPriceRange)) {
     var data = timerangeParse(urlParams.marketPriceRange);
     if (data == null) {
-      throw new ValidityState("invalid market data range, catch this later");
+      logger.warn("User passed invalid market value range.");
+    } else {
+      query["marketValue"] = { $gte: data[0], $lte: data[1] };
     }
-    query["marketValue"] = { $gte: data[0], $lte: data[1] };
   }
 
   // landUse=forrest
@@ -124,9 +134,10 @@ function queryBuilder(urlParams) {
   if (isValid(urlParams.taxes)) {
     var data = timerangeParse(urlParams.taxes);
     if (data == null) {
-      throw new ValidityState("invalid tax data range, catch this later");
+      logger.warn("User passed invalid tax range.");
+    } else {
+      query["taxes"] = { $gte: data[0], $lte: data[1] };
     }
-    query["taxes"] = { $gte: data[0], $lte: data[1] };
   }
 
   //landSize="1000-40000"
@@ -134,14 +145,15 @@ function queryBuilder(urlParams) {
   if (isValid(urlParams.landSize)) {
     var data = timerangeParse(urlParams.landSize);
     if (data == null) {
-      throw new ValidityState("invalid land size data range, catch this later");
+      logger.warn("User passed invalid land size range.");
+    } else {
+      query["landSize"] = { $gte: data[0], $lte: data[1] };
     }
-    query["landSize"] = { $gte: data[0], $lte: data[1] };
   }
 
   //year="2000"
   if (isValid(urlParams.yearBuilt)) {
-    var yb = urlParams.yearBuilt
+    var yb = urlParams.yearBuilt;
     query["yearBuilt"] = yb;
   }
 
@@ -152,6 +164,10 @@ function queryBuilder(urlParams) {
         $or: [{ fullName: { $regex: urlParams.owner, $options: "i" } }],
       },
     };
+  }
+
+  if (query == {}) {
+    logger.warn("Search with a blank query.");
   }
 
   return query;
@@ -193,9 +209,6 @@ app.post("/search", async (req, res) => {
   /* BUILDING THE SEARCH QUERY */
   const query = queryBuilder(req.body);
   const limit = handleLimit(req.body.limit);
-
-  console.log("query builder");
-  console.log(query);
 
   const conn = await init();
   const data = conn.find(query).sort({ scrapedAt: -1 }).limit(limit);
