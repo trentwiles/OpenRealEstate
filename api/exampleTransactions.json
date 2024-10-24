@@ -1,0 +1,67 @@
+{
+  "exampleTwo": {
+    "lastMarketSale": {
+      "pricePerArea": 30.947955390334574,
+      "value": 550000,
+      "seller": "STOWERS, GARY; STOWERS, MICHELE DENSON",
+      "buyer": "WINGLER, TAM LEROY; TAM LEROY WINGLER REVOCABLE LIVING TRUST,",
+      "filingDate": "2022-01-20T00:00:00.000Z",
+      "transferDate": "2022-01-20T00:00:00.000Z",
+      "documentNumber": null,
+      "documentTypeCode": "WD",
+      "documentTypeDescription": "WARRANTY DEED",
+      "lender": "JOHN HORNE DENSON JR",
+      "loan": {
+        "code": null,
+        "description": null,
+        "first": 0,
+        "second": 0
+      },
+      "sale": {
+        "code": "R",
+        "description": "SALES PRICE OR TRANSFER TAX ROUNDED BY COUNTY"
+      },
+      "titleCompany": "NONE AVAILABLE",
+      "tdDocumentNumber": null,
+      "deedTransactionType": "9",
+      "lenderType": null
+    },
+    "priorMarketSale": {
+      "transferDate": null,
+      "lender": "JOHN HORNE DENSON JR"
+    },
+    "multipleApnFlag": null
+  },
+  "exampleThree": {
+    "lastMarketSale": {
+      "pricePerArea": 7.342007434944238,
+      "value": 122000,
+      "seller": "LLOYD, SHELLEY K; LEISHMAN, MICHAEL SCOTT",
+      "buyer": "HOPKINS, LINDSEY M; HOPKINS, DYLAN HOUSTON",
+      "filingDate": "2020-02-18T00:00:00.000Z",
+      "transferDate": "2020-02-18T00:00:00.000Z",
+      "documentNumber": null,
+      "documentTypeCode": "WD",
+      "documentTypeDescription": "WARRANTY DEED",
+      "lender": null,
+      "loan": {
+        "code": "F",
+        "description": "FHA",
+        "first": 119790,
+        "second": 0
+      },
+      "sale": {
+        "code": "R",
+        "description": "SALES PRICE OR TRANSFER TAX ROUNDED BY COUNTY"
+      },
+      "titleCompany": "NONE AVAILABLE",
+      "tdDocumentNumber": "2677/2095",
+      "deedTransactionType": "2",
+      "lenderType": "M"
+    },
+    "priorMarketSale": {
+      "transferDate": null,
+      "lender": ""
+    }
+  }
+}
