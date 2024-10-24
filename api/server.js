@@ -3,6 +3,7 @@ const { MongoClient, Int32 } = require("mongodb");
 const dotenv = require("dotenv");
 const winston = require("winston");
 const cors = require("cors");
+const gem = require("./gem")
 
 dotenv.config();
 
@@ -247,6 +248,27 @@ app.get("/property", async (req, res) => {
   const data = await conn.find(query, options).toArray();
   res.json({ results: data });
 });
+
+app.post("/summary", async (req, res) => {
+  const data = req.query.data
+  const result = await gem.transactionHistorySummary(data)
+  return res.json({"raw": result})
+})
+
+/* ADMIN FUNCTIONS */
+/* MUST contain the admin key in the post body (as defined in .env) */
+
+app.post("/cleanDatabase", async (req, res) => {
+  /* TODO: remove all duplicate lightbox IDs */
+  logger.info("Admin ran 'cleanDatabase'")
+  res.json({})
+})
+
+app.post("/wipeDatabase", async (req, res) => {
+  /* TODO: wipe all properties */
+  logger.info("Admin ran 'wipeDatabase'")
+  res.json({})
+})
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
