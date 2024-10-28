@@ -16,8 +16,30 @@ function convertEpochToReadableTime(epochMillis) {
   return date.toLocaleString(); // This will use the default locale and format
 }
 
+function determinePlaceholderImage(type) {
+  type = type.toLowerCase()
+  
+  if(type.includes("home") || type.includes("house") || type.includes("family")){
+    return "https://trentwil.es/a/vacant.png"
+  }
+
+  if(type.includes("vacant") || type.includes("abandoned") || type.includes("lot")){
+    return "https://trentwil.es/a/_f02cb7ed-eaaf-4c55-b293-a6c91b0b0851.jpg"
+  }
+
+  if(type.includes("agricultural") || type.includes("farm")) {
+    return "https://trentwil.es/a/OIG2.jpg"
+  }
+
+  return "https://trentwil.es/a/_7cfd872e-04a3-40ef-a3d2-3333e963ecdb.jpg"
+}
+
 function generateInfo(input) {
-  var salePrice = `$${input["marketValue"].toLocaleString("en-US")}`;
+  var mv = input["marketValue"]
+  if(mv == null){
+    mv = -1
+  }
+  var salePrice = `$${mv.toLocaleString("en-US")}`;
   var type = input["landUse"].toLowerCase()
   // times 1000 for javascript's built in date function
   var epoch = convertEpochToReadableTime(input["scrapedAt"] * 1000);
@@ -34,16 +56,20 @@ $(document).ready(function () {
       $("#town1").text(data["results"][0]["streetAddressDetails"]["town"]);
       $("#state1").text(data["results"][0]["streetAddressDetails"]["state"]);
       $("#content1").html(generateInfo(data["results"][0]))
+      $("#image1").attr("src", determinePlaceholderImage(data["results"][0]["landUse"]));
 
       mapSetup("map2", 50, 39);
       $("#town2").text(data["results"][1]["streetAddressDetails"]["town"]);
       $("#state2").text(data["results"][1]["streetAddressDetails"]["state"]);
       $("#content2").html(generateInfo(data["results"][1]))
+      $("#image2").attr("src", determinePlaceholderImage(data["results"][1]["landUse"]));
 
       mapSetup("map3", 75, 40);
       $("#town3").text(data["results"][2]["streetAddressDetails"]["town"]);
       $("#state3").text(data["results"][2]["streetAddressDetails"]["state"]);
       $("#content3").html(generateInfo(data["results"][2]))
+      $("#image3").attr("src", determinePlaceholderImage(data["results"][2]["landUse"]));
+
     }
   });
 });
