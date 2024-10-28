@@ -1,3 +1,142 @@
 <%- include('partials/header') %>
-<!-- write the HTML here-->
-<%- include('partials/footer') %>
+
+
+
+    <!-- Hero Section -->
+    <section class="hero is-primary is-medium">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title">Open Real Estate</h1>
+                <p class="subtitle">Description example text example text example text example text example text example
+                    text</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline">
+                <!-- First Row -->
+                <div class="column is-one-third">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-2by1">
+                                <div id="map1" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-48x48">
+                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png"
+                                            alt="Placeholder image" />
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4">John Smith</p>
+                                    <p class="subtitle is-6">@johnsmith</p>
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
+                                iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+                                <a href="#">#responsive</a>
+                                <br />
+                                <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-one-third">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-2by1">
+                                <div id="map2" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-48x48">
+                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png"
+                                            alt="Placeholder image" />
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4">John Smith</p>
+                                    <p class="subtitle is-6">@johnsmith</p>
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
+                                iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+                                <a href="#">#responsive</a>
+                                <br />
+                                <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column is-one-third">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-2by1">
+                                <div id="map3" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-48x48">
+                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png"
+                                            alt="Placeholder image" />
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="title is-4">John Smith</p>
+                                    <p class="subtitle is-6">@johnsmith</p>
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec
+                                iaculis mauris. <a>@bulmaio</a>. <a href="#">#css</a>
+                                <a href="#">#responsive</a>
+                                <br />
+                                <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <script src="home.js"></script>
+    <script>
+        // Initialize the map
+        function mapSetup(id) {
+            const map = L.map(id).setView([51.505, -0.09], 13); // Set initial coordinates and zoom level
+
+            // Add a tile layer
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution:
+                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
+
+            // Optional: Add a marker to the map
+            L.marker([51.505, -0.09])
+                .addTo(map)
+                .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+                .openPopup();
+        }
+        mapSetup("map1")
+        mapSetup("map2")
+        mapSetup("map3")
+    </script>
+    <%- include('partials/footer') %>
