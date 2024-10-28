@@ -1,46 +1,85 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 
 <head>
-    <title><%= title %></title>
-    <link href="https://cdn.jsdelivr.net/npm/halfmoon@2.0.2/css/halfmoon.min.css" rel="stylesheet" integrity="sha256-RjeFzczeuZHCyS+Gvz+kleETzBF/o84ZRHukze/yv6o=" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real Estate Data</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg" style="background-color: var(--bs-content-bg); border-bottom: var(--bs-border-width) solid var(--bs-content-border-color);">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">
-            OpenRealEstate
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse-1" aria-controls="navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbar-collapse-1">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">About</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Product
-                </a>
-                <ul class="dropdown-menu mt-lg-2 rounded-top-0">
-                  <li><a class="dropdown-item" href="#">Page builder</a></li>
-                  <li><a class="dropdown-item" href="#">Form builder</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Plan and pricing</a></li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link disabled">Blog</a>
-              </li>
-            </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search docs" aria-label="Search">
-              <button class="btn btn-primary" type="submit">Search</button>
-            </form>
+  <!-- Navbar -->
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#">
+        Real Estate Data
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item">Home</a>
+        <a class="navbar-item">Documentation</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">More</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item">About</a>
+            <a class="navbar-item is-selected">Jobs</a>
+            <a class="navbar-item">Contact</a>
+            <hr class="navbar-divider">
+            <a class="navbar-item">Report an issue</a>
           </div>
         </div>
-      </nav>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-primary"><strong>Sign up</strong></a>
+            <a class="button is-light">Log in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero is-primary is-medium">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <h1 class="title">Lorem Ipsum</h1>
+        <p class="subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="section">
+    <div class="container">
+      <h1 class="title has-text-centered">Hello, World!</h1>
+      <p class="subtitle has-text-centered">This is a basic page with a navbar and a hero section using Bulma.</p>
+    </div>
+  </section>
+
+  <!-- Bulma JavaScript for Navbar Burger Toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+      navbarBurgers.forEach(el => {
+        el.addEventListener('click', () => {
+          const target = el.dataset.target;
+          const $target = document.getElementById(target);
+          el.classList.toggle('is-active');
+          $target.classList.toggle('is-active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
