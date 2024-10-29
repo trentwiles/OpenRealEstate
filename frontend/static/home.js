@@ -71,5 +71,8 @@ $(document).ready(function () {
       $("#image3").attr("src", determinePlaceholderImage(data["results"][2]["landUse"]));
 
     }
+  })
+  .fail(function (xhr, status, error) {
+    $("#body").html(OFFLINE)
   });
 });

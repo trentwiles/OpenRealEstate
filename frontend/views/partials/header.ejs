@@ -14,7 +14,7 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
-<body>
+<body id="body">
   <style>
     nav {
       padding-left: 10px;
@@ -36,16 +36,15 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item">Home</a>
-        <a class="navbar-item">Documentation</a>
+        <a class="navbar-item" href="/">Home</a>
+        <a class="navbar-item" href="/search">Search</a>
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">More</a>
           <div class="navbar-dropdown">
-            <a class="navbar-item">About</a>
-            <a class="navbar-item is-selected">Jobs</a>
-            <a class="navbar-item">Contact</a>
+            <a class="navbar-item" href="/about">About</a>
+            <a class="navbar-item" href="/contact">Contact</a>
             <hr class="navbar-divider">
-            <a class="navbar-item">Report an issue</a>
+            <a class="navbar-item" href="/bug-report">Report an issue</a>
           </div>
         </div>
       </div>
@@ -76,3 +75,4 @@
       });
     });
   </script>
+  <script src="vars.js"></script>

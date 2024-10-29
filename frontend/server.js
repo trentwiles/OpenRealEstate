@@ -11,6 +11,10 @@ app.get("/", async (req, res) => {
   res.render('home', { title: "Home" })
 });
 
+app.get("/search", async (req, res) => {
+  res.render('search', { title: "Search" })
+});
+
 app.listen(3001, () => {
   console.log("Server is running on http://localhost:3001");
 });

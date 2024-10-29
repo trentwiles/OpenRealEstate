@@ -1,0 +1,1 @@
+const OFFLINE = `<div class="full-height is-flex is-justify-content-center is-align-items-center"><h1 class="title" style="height: 100vh;">Offline: Check Your Internet Connection</h1></div>`
