@@ -79,28 +79,19 @@ function queryBuilder(urlParams) {
 
   // town=example
   if (isValid(urlParams.town)) {
-    query["streetAddressDetails.town"] = {
-      $regex: urlParams.town,
-      $options: "i",
-    };
+    query["streetAddressDetails.town"] = urlParams.town
   }
 
   // zip=071884
   // keep in mind zip is treated as a string
   if (isValid(urlParams.zip)) {
-    query["streetAddressDetails.zip"] = {
-      $regex: urlParams.zip,
-      $options: "i",
-    };
+    query["streetAddressDetails.zip"] = urlParams.zip
   }
 
   // state=MA
   // keep in mind zip is treated as a string
   if (isValid(urlParams.state)) {
-    query["streetAddressDetails.state"] = {
-      $regex: urlParams.state,
-      $options: "i",
-    };
+    query["streetAddressDetails.state"] = urlParams.state
   }
 
   //time="123-124"
@@ -158,11 +149,17 @@ function queryBuilder(urlParams) {
     }
   }
 
-  //year="2000"
+  //yearBuilt="1990-2000"
   if (isValid(urlParams.yearBuilt)) {
-    var yb = urlParams.yearBuilt;
-    query["yearBuilt"] = yb;
+    var data = timerangeParse(urlParams.yearBuilt);
+    if (data == null) {
+      logger.warn("User passed invalid market value range.");
+      return {"error": true, "message": "Invalid marketPriceRange"}
+    } else {
+      query["yearBuilt"] = { $gte: data[0], $lte: data[1] };
+    }
   }
+
 
   if (isValid(urlParams.owner)) {
     // searches each fullName field under owner
@@ -176,6 +173,8 @@ function queryBuilder(urlParams) {
   if (query == {}) {
     logger.warn("Search with a blank query.");
   }
+
+  console.log(query)
 
   return query;
 }

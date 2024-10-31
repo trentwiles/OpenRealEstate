@@ -1,71 +1,116 @@
 <%- include('partials/header') %>
-<!-- Advanced Search Tool in Bulma -->
-<section class="section">
+  <!-- Advanced Search Tool in Bulma -->
+  <section class="section">
     <div class="container">
       <h1 class="title">Advanced Search</h1>
       <div class="box">
         <form id="advanced-search-form">
           <!-- Keyword Search -->
           <div class="field">
-            <label class="label">Keyword</label>
+            <label class="label">Land Use Keyword</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Enter keywords" name="keyword">
+              <input class="input" type="text" placeholder="Vacant" name="landUse" id="landUse">
             </div>
           </div>
-  
-          <!-- Category Dropdown -->
+
+          <!-- Keyword Search -->
           <div class="field">
-            <label class="label">Category</label>
+            <label class="label">Owner Name Keyword</label>
             <div class="control">
-              <div class="select is-fullwidth">
-                <select name="category">
-                  <option value="">All Categories</option>
-                  <option value="books">Books</option>
-                  <option value="electronics">Electronics</option>
-                  <option value="furniture">Furniture</option>
-                </select>
-              </div>
+              <input class="input" type="text" placeholder="Vacant" name="owner" id="owner">
             </div>
           </div>
-  
+
+          <div class="field">
+            <label class="label">City</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Oakland" name="town" id="town">
+            </div>
+          </div>
+
+
+          <div class="field">
+            <label class="label">State</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="CA" name="state" id="state">
+            </div>
+          </div>
+
+
           <!-- Date Range -->
           <div class="field is-grouped">
             <div class="control">
-              <label class="label">Start Date</label>
-              <input class="input" type="date" name="startDate">
+              <label class="label">Build Year - Start Date</label>
+              <input class="input" type="date" name="startDate" id="startDate" name="yearStartDate">
             </div>
             <div class="control">
-              <label class="label">End Date</label>
-              <input class="input" type="date" name="endDate">
+              <label class="label">Build Year - End Date</label>
+              <input class="input" type="date" name="endDate" id="endDate" name="yearEndDate">
             </div>
           </div>
-  
+
           <!-- Price Range Slider -->
           <div class="field">
             <label class="label">Price Range</label>
             <div class="control">
-              <input class="input" type="range" name="priceRange" min="0" max="1000" step="10">
+              <input class="input" type="range" min="0" max="1000000" step="100" id="minPriceSlider" name="minPrice"
+                oninput="updatePriceRange()">
+              <input class="input" type="range" min="0" max="1000000" step="100" id="maxPriceSlider" name="maxPrice"
+                oninput="updatePriceRange()">
             </div>
-            <p class="help">Adjust to set minimum and maximum price.</p>
+            <p class="help">Adjust sliders to set minimum and maximum price.</p>
           </div>
-  
+
+          <p>Sale Price Range: <span id="priceDisplayMin">$0</span> - <span id="priceDisplayMax">$1,000,000</span></p>
+          <br>
+
+          <script>
+            function updatePriceRange() {
+              const minSlider = document.getElementById('minPriceSlider');
+              const maxSlider = document.getElementById('maxPriceSlider');
+              const minDisplay = document.getElementById('priceDisplayMin');
+              const maxDisplay = document.getElementById('priceDisplayMax');
+
+              // Prevent min slider from exceeding max slider value and vice versa
+              if (parseInt(minSlider.value) > parseInt(maxSlider.value)) {
+                minSlider.value = maxSlider.value;
+              } else if (parseInt(maxSlider.value) < parseInt(minSlider.value)) {
+                maxSlider.value = minSlider.value;
+              }
+
+              // Format the min and max values as currency
+              const formattedMinPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+              }).format(minSlider.value);
+
+              const formattedMaxPrice = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+              }).format(maxSlider.value);
+
+              // Update the displayed price range
+              minDisplay.textContent = formattedMinPrice;
+              maxDisplay.textContent = formattedMaxPrice;
+            }
+          </script>
+
           <!-- Additional Filters (Checkboxes) -->
           <div class="field">
             <label class="label">Additional Filters</label>
             <div class="control">
               <label class="checkbox">
-                <input type="checkbox" name="inStock"> In Stock Only
-              </label>
-              <label class="checkbox">
-                <input type="checkbox" name="freeShipping"> Free Shipping
+                <input type="checkbox" name="inStock" id="tos"> I agree to the Terms of Service
               </label>
             </div>
           </div>
-  
+
           <!-- Submit and Reset Buttons -->
           <div class="field is-grouped">
             <div class="control">
-              <button class="button is-link" type="submit">Search</button>
+              <button class="button is-link" type="submit" id="submitButton">Search</button>
             </div>
             <div class="control">
               <button class="button is-light" type="reset">Reset</button>
@@ -75,5 +120,6 @@
       </div>
     </div>
   </section>
-  
-<%- include('partials/footer') %>
+  <script src="form.js"></script>
+
+  <%- include('partials/footer') %>
