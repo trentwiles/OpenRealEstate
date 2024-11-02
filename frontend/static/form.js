@@ -57,6 +57,12 @@ function reset() {
   updatePriceRange()
 }
 
+function searchResultFactory(metadata) {
+  // assumes metadata is in API format
+
+  var cityTown = metadata["streetAddressDetails"]["town"] + ", " + metadata["streetAddressDetails"]["state"]
+}
+
 $(document).ready(function () {
   updatePriceRange() 
   $("#submitButton").click(function (event) {
