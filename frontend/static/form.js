@@ -96,7 +96,7 @@ function searchResultFactory(metadata) {
   var value = metadata["marketValue"]
 
   return `
-  <a href='/property/${metadata["id"]}/'>
+  <a href='/p/${metadata["id"]}/'>
     <div class="box">
       <h3 class="title is-4">${streetAddress}</h3>
       <p><strong>Location:</strong> ${shortAddress}</p>
@@ -126,7 +126,7 @@ $(document).ready(function () {
     $("#searchResultsHolder").append("<center><img src='https://trentwil.es/a/Basketball.gif' /></center>")
     $.post(
       {
-        url: "http://localhost:3000/search",
+        url: `${API_URL}/search`,
         contentType: "application/json",
         dataType: "json",
         data: query,
