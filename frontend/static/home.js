@@ -1,5 +1,5 @@
-function mapSetup(id, lat, lon) {
-  const map = L.map(id).setView([lat, lon], 13); // Set initial coordinates and zoom level
+function mapSetup(id, poly) {
+  const map = L.map(id).setView([0,0], 12); // Set initial coordinates and zoom level
 
   // Add a tile layer
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -7,8 +7,9 @@ function mapSetup(id, lat, lon) {
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
-  // Optional: Add a marker to the map
-  L.marker([lat, lon]).addTo(map).openPopup();
+  const polygon = L.polygon(poly, { color: 'blue' }).addTo(map);
+
+  map.fitBounds(polygon.getBounds());
 }
 
 function convertEpochToReadableTime(epochMillis) {
@@ -52,19 +53,19 @@ $(document).ready(function () {
   $.get("http://localhost:3000/random?limit=3", function (data, status) {
     if (status == "success") {
       $("#houses").fadeIn();
-      mapSetup("map1", 72, 42);
+      mapSetup("map1", wktToLeaflet(data["results"][0]["geoPolygon"]["wkt"]));
       $("#town1").text(data["results"][0]["streetAddressDetails"]["town"]);
       $("#state1").text(data["results"][0]["streetAddressDetails"]["state"]);
       $("#content1").html(generateInfo(data["results"][0]))
       $("#image1").attr("src", determinePlaceholderImage(data["results"][0]["landUse"]));
 
-      mapSetup("map2", 50, 39);
+      mapSetup("map2", wktToLeaflet(data["results"][1]["geoPolygon"]["wkt"]));
       $("#town2").text(data["results"][1]["streetAddressDetails"]["town"]);
       $("#state2").text(data["results"][1]["streetAddressDetails"]["state"]);
       $("#content2").html(generateInfo(data["results"][1]))
       $("#image2").attr("src", determinePlaceholderImage(data["results"][1]["landUse"]));
 
-      mapSetup("map3", 75, 40);
+      mapSetup("map3", wktToLeaflet(data["results"][2]["geoPolygon"]["wkt"]));
       $("#town3").text(data["results"][2]["streetAddressDetails"]["town"]);
       $("#state3").text(data["results"][2]["streetAddressDetails"]["state"]);
       $("#content3").html(generateInfo(data["results"][2]))
