@@ -6,6 +6,11 @@ function parseURL() {
 $(document).ready(function () {
   $.get(`${API_URL}/id?id=${parseURL()}`, function (data, status) {
     if (status == "success") {
+      // fill in values here
+    }else{
+      alert("404 not found replace this")
     }
+  }).fail(function () {
+    $("#body").html(OFFLINE)
   });
 });

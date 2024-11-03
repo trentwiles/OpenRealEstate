@@ -50,8 +50,10 @@ function generateInfo(input) {
 }
 
 $(document).ready(function () {
+  $("#loader").show()
   $.get("http://localhost:3000/random?limit=3", function (data, status) {
     if (status == "success") {
+      $("#loader").hide()
       $("#houses").fadeIn();
       mapSetup("map1", wktToLeaflet(data["results"][0]["geoPolygon"]["wkt"]));
       $("#town1").text(data["results"][0]["streetAddressDetails"]["town"]);
