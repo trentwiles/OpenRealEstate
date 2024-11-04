@@ -258,12 +258,59 @@ app.post("/summary", async (req, res) => {
 /* MUST contain the admin key in the post body (as defined in .env) */
 
 app.post("/cleanDatabase", async (req, res) => {
-  /* TODO: remove all duplicate lightbox IDs */
-  logger.info("Admin ran 'cleanDatabase'")
-  res.json({})
+  console.log(req.body)
+
+  if(req.body.key != process.env.ADMIN_TOKEN) {
+    logger.warn("Unauthorized login attempt on admin method 'cleanDatabase'")
+    return res.status(401).send("unauthorized")
+  }
+
+  const conn = await init();
+
+  /* Collect items with duplicate Lightbox ID */
+  const duplicates = await conn.aggregate([
+    {
+      $group: {
+        _id: "$lightboxParcelID",
+        ids: { $push: "$_id" },
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $match: {
+        count: { $gt: 1 }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        ids: { $slice: ["$ids", 1, { $subtract: ["$count", 1] }] }
+      }
+    }
+  ]);
+
+  /* Push them to format MongoDB understands, then destroy */
+  const bulkOps = [];
+  duplicates.forEach(doc => {
+    bulkOps.push({
+      deleteMany: { filter: { _id: { $in: doc.ids } } }
+    });
+  });
+
+  if (bulkOps.length > 0) {
+    db.collection.bulkWrite(bulkOps);
+  }
+  
+  logger.info("Admin ran 'cleanDatabase' (" + bulkOps.length + " records destroyed)")
+  return res.json(duplicates.toArray())
 })
 
 app.post("/wipeDatabase", async (req, res) => {
+  console.log(req.body)
+  if(req.body["key"] != process.env.ADMIN_TOKEN) {
+    logger.warn("Unauthorized login attempt on admin method 'wipeDatabase'")
+    return res.status(401).send("unauthorized")
+  }
   /* TODO: wipe all properties */
   logger.info("Admin ran 'wipeDatabase'")
   res.json({})
