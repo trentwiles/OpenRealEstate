@@ -4,7 +4,7 @@ function parseURL() {
     return spl[2];
 }
 $(document).ready(function () {
-  $.get(`${API_URL}/id?id=${parseURL()}`, function (data, status) {
+  $.post(`${API_URL}/property`, function (data, status) {
     if (status == "success") {
       // fill in values here
     }else{

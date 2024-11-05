@@ -51,7 +51,7 @@ function generateInfo(input) {
 
 $(document).ready(function () {
   $("#loader").show()
-  $.get("http://localhost:3000/random?limit=3", function (data, status) {
+  $.get(`${API_URL}/random?limit=3`, function (data, status) {
     if (status == "success") {
       $("#loader").hide()
       $("#houses").fadeIn();
