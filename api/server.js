@@ -240,6 +240,8 @@ app.post("/property", async (req, res) => {
   const realID = Buffer.from(id, 'base64').toString('utf-8');
   const query = ObjectId.isValid(id) ? { _id: new ObjectId(realID) } : { _id: realID };
 
+  console.log(query)
+
   const options = {
     sort: { scrapedAt: -1 },
     limit: 1,
