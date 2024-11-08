@@ -227,8 +227,8 @@ app.post("/search", async (req, res) => {
   res.json({ results: await data.toArray() });
 });
 
-app.get("/property", async (req, res) => {
-  const id = req.query.id;
+app.post("/property", async (req, res) => {
+  const id = req.body.id;
 
   if (!id) {
     return res
