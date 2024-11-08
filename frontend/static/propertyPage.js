@@ -33,15 +33,66 @@ $(document).ready(function () {
         const taxes = api["taxes"] || "Unlisted"
         const taxYear = api["taxYear"] || "Unknown"
         const taxExempt = api["taxExemption"] || "None"
-        const latestSaleInfo = api["lastMarketSale"]
+        const latestSale = api["verboseTransaction"]["lastMarketSale"]
 
-        const latestSale = `
-        <table>
-
+        const generalInfo = `
+        <table class="table is-fullwidth is-striped">
+          <tbody>
+            <tr>
+              <th>Location</th>
+              <td>${fullAddress}</td>
+            </tr>
+            <tr>
+              <th>Price</th>
+              <td>${latestSale["value"] ? `$${latestSale["value"]}` : "Unknown"}</td>
+            </tr>
+            <tr>
+              <th>Bedrooms</th>
+              <td>3</td>
+            </tr>
+            <tr>
+              <th>Bathrooms</th>
+              <td>2</td>
+            </tr>
+            <tr>
+              <th>Square Footage</th>
+              <td>1,800 sq ft</td>
+            </tr>
+            <tr>
+              <th>Lot Size</th>
+              <td>5,000 sq ft</td>
+            </tr>
+            <tr>
+              <th>Year Built</th>
+              <td>2005</td>
+            </tr>
+          </tbody>
         </table>
         `
 
-        const body = `
+        const latestSaleTable = `
+        <table>
+          <tr>
+            <th>Seller</th>
+            <th>Buyer</th>
+            <th>Sale Price</th>
+            <th>Filing Date</th>
+            <th>Transfer Date</th>
+            <th>Lender</th>
+          </tr>
+          <tr>
+            <td>${latestSale["seller"] || "Unknown"}</td>
+            <td>${latestSale["buyer"] || "Unknown"}</td>
+            <!-- adds $ if non-null -->
+            <td>${latestSale["value"] ? `$${latestSale["value"]}` : "Unknown"}</td>
+            <td>${(() => { try { return new Date(latestSale["fillingDate"]).toString(); } catch (e) { return "Unknown"; } })()}</td>
+            <td>${(() => { try { return new Date(latestSale["transferDate"]).toString(); } catch (e) { return "Unknown"; } })()}</td>
+            <td>${latestSale["lender"] || "Unknown"}</td>
+          </tr>
+        </table>
+        `
+
+        const bodyTask = `
                 
         <section class="section">
           <div class="container">
@@ -49,50 +100,14 @@ $(document).ready(function () {
 
             <div class="columns is-vcentered">
               
-              <!-- Image Section -->
-              <div class="column is-one-third">
-                <figure class="image is-4by3">
-                  <img src="https://via.placeholder.com/800x600" alt="Property Image">
-                </figure>
-              </div>
+              
 
               <!-- Details Section -->
               <div class="column">
                 <div class="box">
                   <h2 class="subtitle">Property Details</h2>
-
-                  <table class="table is-fullwidth is-striped">
-                    <tbody>
-                      <tr>
-                        <th>Location</th>
-                        <td>123 Main St, Springfield</td>
-                      </tr>
-                      <tr>
-                        <th>Price</th>
-                        <td>$450,000</td>
-                      </tr>
-                      <tr>
-                        <th>Bedrooms</th>
-                        <td>3</td>
-                      </tr>
-                      <tr>
-                        <th>Bathrooms</th>
-                        <td>2</td>
-                      </tr>
-                      <tr>
-                        <th>Square Footage</th>
-                        <td>1,800 sq ft</td>
-                      </tr>
-                      <tr>
-                        <th>Lot Size</th>
-                        <td>5,000 sq ft</td>
-                      </tr>
-                      <tr>
-                        <th>Year Built</th>
-                        <td>2005</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  ${generalInfo}
+                  ${latestSaleTable}
                 </div>
               </div>
 
@@ -100,6 +115,7 @@ $(document).ready(function () {
           </div>
         </section>
         `
+        $("#infoDetailsHolder").append(bodyTask)
       }else{
         // 404 or other error handling
       }
