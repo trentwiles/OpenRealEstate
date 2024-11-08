@@ -230,13 +230,15 @@ app.post("/search", async (req, res) => {
 app.post("/property", async (req, res) => {
   const id = req.body.id;
 
-  if (!id) {
+  if (!id || id == null || id == undefined) {
     return res
       .status(400)
       .json({ error: true, status: "Missing ID parameter" });
   }
 
-  const query = { id: id };
+  // id is base64 encoded on the frontend, so decode it
+  const realID = Buffer.from(id, 'base64').toString('utf-8');
+  const query = { _id: new ObjectId(id) };
 
   const options = {
     sort: { scrapedAt: -1 },
