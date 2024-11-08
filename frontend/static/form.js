@@ -64,11 +64,16 @@ function toTitleCase(name) {
   if (name == null || name == "" || name == undefined) {
     return "Unknown"
   }
-  return name
-    .toLowerCase()
-    .split(" ")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  // for some reason above, the conditions do not catch all invalid "names"
+  try{
+    return name
+      .toLowerCase()
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }catch{
+    return name
+  }
 }
 
 function decodeOwners(owners) {
