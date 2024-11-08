@@ -101,7 +101,7 @@ function searchResultFactory(metadata) {
   var value = metadata["marketValue"]
 
   return `
-  <a href='/p/${metadata["id"]}/'>
+  <a href='/p/${btoa(metadata["_id"])}/'>
     <div class="box">
       <h3 class="title is-4">${streetAddress}</h3>
       <p><strong>Location:</strong> ${shortAddress}</p>
