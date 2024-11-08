@@ -60,18 +60,21 @@ $(document).ready(function () {
       $("#state1").text(data["results"][0]["streetAddressDetails"]["state"]);
       $("#content1").html(generateInfo(data["results"][0]))
       $("#image1").attr("src", determinePlaceholderImage(data["results"][0]["landUse"]));
+      $("a#cardOneLink").attr("href", "/p/" + btoa(data["results"][0]["_id"]))
 
       mapSetup("map2", wktToLeaflet(data["results"][1]["geoPolygon"]["wkt"]));
       $("#town2").text(data["results"][1]["streetAddressDetails"]["town"]);
       $("#state2").text(data["results"][1]["streetAddressDetails"]["state"]);
       $("#content2").html(generateInfo(data["results"][1]))
       $("#image2").attr("src", determinePlaceholderImage(data["results"][1]["landUse"]));
+      $("a#cardTwoLink").attr("href", "/p/" + btoa(data["results"][1]["_id"]))
 
       mapSetup("map3", wktToLeaflet(data["results"][2]["geoPolygon"]["wkt"]));
       $("#town3").text(data["results"][2]["streetAddressDetails"]["town"]);
       $("#state3").text(data["results"][2]["streetAddressDetails"]["state"]);
       $("#content3").html(generateInfo(data["results"][2]))
       $("#image3").attr("src", determinePlaceholderImage(data["results"][2]["landUse"]));
+      $("a#cardThreeLink").attr("href", "/p/" + btoa(data["results"][2]["_id"]))
 
     }
   })
