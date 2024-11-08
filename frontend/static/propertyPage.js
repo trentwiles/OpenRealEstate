@@ -71,24 +71,28 @@ $(document).ready(function () {
         `
 
         const latestSaleTable = `
-        <table>
-          <tr>
-            <th>Seller</th>
-            <th>Buyer</th>
-            <th>Sale Price</th>
-            <th>Filing Date</th>
-            <th>Transfer Date</th>
-            <th>Lender</th>
-          </tr>
-          <tr>
-            <td>${latestSale["seller"] || "Unknown"}</td>
-            <td>${latestSale["buyer"] || "Unknown"}</td>
-            <!-- adds $ if non-null -->
-            <td>${latestSale["value"] ? `$${latestSale["value"]}` : "Unknown"}</td>
-            <td>${(() => { try { return new Date(latestSale["fillingDate"]).toString(); } catch (e) { return "Unknown"; } })()}</td>
-            <td>${(() => { try { return new Date(latestSale["transferDate"]).toString(); } catch (e) { return "Unknown"; } })()}</td>
-            <td>${latestSale["lender"] || "Unknown"}</td>
-          </tr>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Seller</th>
+              <th>Buyer</th>
+              <th>Sale Price</th>
+              <th>Filing Date</th>
+              <th>Transfer Date</th>
+              <th>Lender</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${latestSale["seller"] || "Unknown"}</td>
+              <td>${latestSale["buyer"] || "Unknown"}</td>
+              <!-- adds $ if non-null -->
+              <td>${latestSale["value"] ? `$${latestSale["value"]}` : "Unknown"}</td>
+              <td>${latestSale["filingDate"] ? new Date(latestSale["filingDate"]).toLocaleDateString('en-US') : 'No date available'}</td>
+              <td>${latestSale["filingDate"] ? new Date(latestSale["transferDate"]).toLocaleDateString('en-US') : 'No date available'}</td>
+              <td>${latestSale["lender"] || "Unknown"}</td>
+            </tr>
+          <tbody>
         </table>
         `
 
@@ -100,15 +104,35 @@ $(document).ready(function () {
 
             <div class="columns is-vcentered">
               
-              
+              <!-- Image Section (takes up 1/3 of the space and matches the height of the table) -->
+              <div class="column is-one-third" style="display: flex; align-items: stretch;">
+                <div class="box" style="flex: 1; display: flex; align-items: stretch;">
+                  <img src="https://picsum.photos/500" alt="Property Image" class="image" style="object-fit: cover; height: 100%; width: 100%;"/>
+                </div>
+              </div>
 
-              <!-- Details Section -->
-              <div class="column">
-                <div class="box">
+              <!-- Details Section with Table (takes up 2/3 of the space) -->
+              <div class="column is-two-thirds">
+                <div class="box" style="height: 100%; display: flex; flex-direction: column;">
                   <h2 class="subtitle">Property Details</h2>
                   ${generalInfo}
-                  ${latestSaleTable}
                 </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="container">
+            <h1 class="title">Sale Details</h1>
+
+            <div class="columns is-vcentered">
+              <div class="column">
+                <div class="box">
+                  <h2 class="subtitle">Last Transaction</h2>
+                  ${latestSaleTable}
+                  </div>
               </div>
 
             </div>
