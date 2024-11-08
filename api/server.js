@@ -239,7 +239,7 @@ app.post("/property", async (req, res) => {
 
   // id is base64 encoded on the frontend, so decode it
   const realID = Buffer.from(id, 'base64').toString('utf-8');
-  const query = ObjectId.isValid(id) ? { _id: new ObjectId(realID) } : { _id: realID };
+  const query = { _id: new ObjectId(realID) }
 
   console.log(query)
 
