@@ -37,6 +37,16 @@ async function init() {
   return collection;
 }
 
+async function initCustom(col) {
+  const client = new MongoClient(MONGODB);
+  await client.connect();
+
+  const database = client.db(process.env.M_DATABASE);
+  const collection = database.collection(col);
+
+  return collection;
+}
+
 function isValid(param) {
   return param != null && param != "";
 }
@@ -263,6 +273,24 @@ app.get("/towns", async(req, res) => {
   const conn = await init();
   const data = await conn.distinct("streetAddressDetails.town")
   return res.json({"towns": data.filter(town => town !== "")})
+})
+
+app.get("/last-names/:page", async(req, res) => {
+  var page = parseInt(req.params.page)
+  var pageSize = 10
+
+  if(page < 1) {
+    return res.json({"error": true, "message": "'page' is too small"})
+  }
+
+  const conn = await initCustom("lastNames");
+  const results = await conn.find({}, { projection: { _id: 0 } })
+  .sort({ lastName: 1 })
+  .skip(pageSize * (page - 1))
+  .limit(pageSize)
+  .toArray()
+
+  return res.json(results)
 })
 
 /* ADMIN FUNCTIONS */
