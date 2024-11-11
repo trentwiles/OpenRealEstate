@@ -27,5 +27,16 @@ function next() {
 }
 
 $(document).ready(function () {
+    // first we need to make sure the page is valid
+    switch(type) {
+        case "by-town":
+            console.log("Valid!")
+            break;
+        case "by-last-name":
+            console.log("Valid too!");
+            break;
+        default:
+            alert("invalid!")
+    }
   load(index)
 });

@@ -1,6 +1,11 @@
 <%- include('partials/header') %>
     <!-- Page used for sorting by something -->
     <!-- So far, it's just towns and last names -->
+    <script>
+        const url = new URL(window.location)
+        const segments = url.pathname.split("/").filter(Boolean);
+        const type = segments[segments.length - 1];
+    </script>
     <script src="/by.js"></script>
     <h2 id="sortBy"></h2>
     <section class="section">
