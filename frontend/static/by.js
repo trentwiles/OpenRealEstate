@@ -1,4 +1,6 @@
 var index = 1
+var api_route = ""
+var indexName = ""
 
 function load(api_path, indexName, page) {
     $("#nextButton").hide()
@@ -23,7 +25,7 @@ function load(api_path, indexName, page) {
 
 function next() {
     index++
-    load(index)
+    load(api_route, indexName, index)
 }
 
 $(document).ready(function () {
@@ -34,17 +36,20 @@ $(document).ready(function () {
             /**
              * [{"town":"Boston"},{"town":"Uxbridge"}...]
              */
-            load("by-town", "town", 1)
+            api_route = "by-town"
+            indexName = "town"
+            load(api_route, indexName, 1)
             break;
         case "by-last-name":
             // api response will look like:
             /**
              * [{"lastName":"A PAPAGNO"},{"lastName":"A PAUL"}...]
              */
-            load("last-names", "lastName", 1)
+            api_route = "last-names"
+            indexName = "lastName"
+            load(api_route, indexName, 1)
             break;
         default:
             alert("invalid!")
     }
-  load(index)
 });
