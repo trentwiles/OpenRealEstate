@@ -19,6 +19,10 @@ app.get("/p/:id/", async (req, res) => {
   res.render("property")
 });
 
+app.get("/list/:by/", async (req, res) => {
+  res.render("by.ejs")
+})
+
 app.listen(3001, () => {
   console.log("Server is running on http://localhost:3001");
 });
