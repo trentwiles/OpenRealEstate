@@ -80,7 +80,7 @@ function addPropertyBox(input) {
                                     </div>
                                 </div>
 
-                                <div class="content" id="content1">
+                                <div class="content" id="content1" style="color:black;">
                                     ${generateInfo(input)}
                                 </div>
                             </div>
