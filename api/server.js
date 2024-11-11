@@ -259,6 +259,12 @@ app.post("/summary", async (req, res) => {
   return res.json({"raw": result})
 })
 
+app.get("/towns", async(req, res) => {
+  const conn = await init();
+  const data = await conn.distinct("streetAddressDetails.town")
+  return res.json({"towns": data.filter(town => town !== "")})
+})
+
 /* ADMIN FUNCTIONS */
 /* MUST contain the admin key in the post body (as defined in .env) */
 
