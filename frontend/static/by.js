@@ -1,11 +1,11 @@
 var index = 1
 
-function load(page) {
+function load(api_path, indexName, page) {
     $("#nextButton").hide()
     $("#appendHere").empty()
-    $.get(`${API_URL}/last-names/${page}`, function (data) {
+    $.get(`${API_URL}/${api_path}/${page}`, function (data) {
         data.forEach(element => {
-            if(element["lastName"] != null) {
+            if(element[indexName] != null) {
                 const html = `
                 <div class="column is-one-third">
                     <a href="/search?lastName=${encodeURIComponent(element.lastName)}">${element.lastName}</a>
@@ -30,10 +30,18 @@ $(document).ready(function () {
     // first we need to make sure the page is valid
     switch(type) {
         case "by-town":
-            console.log("Valid!")
+            // api response will look like:
+            /**
+             * [{"town":"Boston"},{"town":"Uxbridge"}...]
+             */
+            load("by-town", "town", 1)
             break;
         case "by-last-name":
-            console.log("Valid too!");
+            // api response will look like:
+            /**
+             * [{"lastName":"A PAPAGNO"},{"lastName":"A PAUL"}...]
+             */
+            load("last-names", "lastName", 1)
             break;
         default:
             alert("invalid!")
