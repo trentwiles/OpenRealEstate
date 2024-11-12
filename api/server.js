@@ -293,6 +293,29 @@ app.get("/last-names/:page", async(req, res) => {
   return res.json(results)
 })
 
+/* PDF EXPORT FUNCTIONS */
+/* Includes job creation, job updates, and job completion */
+app.post("/newExportJob", async (req, res) => {
+  // assume this is in the base 64 encoded format
+  const id = req.body.id
+  if (!id || id == null || id == "" || id == undefined) {
+    return res.send(400)
+  }
+
+  const idDecoded = Buffer.from(id, 'base64').toString('utf-8');
+  // no captcha for now, future?
+
+  const conn = await initCustom("batchJobs")
+  const data = {"idDecoded": idDecoded, "isCompleted": false, "downloadLink": null}
+  const result = await conn.insertOne(data)
+
+  return {"success": true, "jobID": result.insertedId}
+})
+
+app.get("/getJobStatus/:id", async (req, res) => {
+  // query the mongodb database for the job
+})
+
 /* ADMIN FUNCTIONS */
 /* MUST contain the admin key in the post body (as defined in .env) */
 
