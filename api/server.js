@@ -1,14 +1,9 @@
 const express = require("express");
-const { MongoClient } = require("mongodb");
 const { ObjectId } = require('bson');
-const dotenv = require("dotenv");
 const winston = require("winston");
 const cors = require("cors");
 const gem = require("./gem")
-
-dotenv.config();
-
-const MONGODB = `mongodb://${process.env.M_USERNAME}:${process.env.M_PASSWORD}@${process.env.M_SERVER}:27017/`;
+const connect = require("./connect.js")
 
 const logger = winston.createLogger({
   transports: [
@@ -21,31 +16,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-async function rawInit() {
-  const client = new MongoClient(MONGODB);
-  await client.connect();
-  return client;
-}
-
-async function init() {
-  const client = new MongoClient(MONGODB);
-  await client.connect();
-
-  const database = client.db(process.env.M_DATABASE);
-  const collection = database.collection(process.env.M_COLLECTION);
-
-  return collection;
-}
-
-async function initCustom(col) {
-  const client = new MongoClient(MONGODB);
-  await client.connect();
-
-  const database = client.db(process.env.M_DATABASE);
-  const collection = database.collection(col);
-
-  return collection;
-}
 
 function isValid(param) {
   return param != null && param != "";
@@ -192,7 +162,7 @@ function queryBuilder(urlParams) {
 
 app.get("/", async (req, res) => {
   const expressVersion = require("express/package.json").version;
-  const conn = await rawInit();
+  const conn = await connect.rawInit();
   const health = await conn.db().admin().command({ serverStatus: 1 });
   res.send({
     mongo: {
@@ -207,7 +177,7 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/random", async (req, res) => {
-  const conn = await init();
+  const conn = await connect.init();
 
   var limit = req.query.limit;
 
@@ -232,7 +202,7 @@ app.post("/search", async (req, res) => {
 
   const limit = handleLimit(req.body.limit);
 
-  const conn = await init();
+  const conn = await connect.init();
   const data = conn.find(query).sort({ scrapedAt: -1 }).limit(limit);
 
   res.json({ results: await data.toArray() });
@@ -258,7 +228,7 @@ app.post("/property", async (req, res) => {
     limit: 1,
   };
 
-  const conn = await init();
+  const conn = await connect.init();
   const data = await conn.find(query, options).toArray();
   res.json({ results: data });
 });
@@ -270,7 +240,7 @@ app.post("/summary", async (req, res) => {
 })
 
 app.get("/towns", async(req, res) => {
-  const conn = await init();
+  const conn = await connect.init();
   const data = await conn.distinct("streetAddressDetails.town")
   return res.json({"towns": data.filter(town => town !== "")})
 })
@@ -283,7 +253,7 @@ app.get("/last-names/:page", async(req, res) => {
     return res.json({"error": true, "message": "'page' is too small"})
   }
 
-  const conn = await initCustom("lastNames");
+  const conn = await connect.initCustom("lastNames");
   const results = await conn.find({}, { projection: { _id: 0 } })
   .sort({ lastName: 1 })
   .skip(pageSize * (page - 1))
@@ -305,7 +275,7 @@ app.post("/newExportJob", async (req, res) => {
   const idDecoded = Buffer.from(id, 'base64').toString('utf-8');
   // no captcha for now, future?
 
-  const conn = await initCustom("batchJobs")
+  const conn = await connect.initCustom("batchJobs")
   const data = {"idDecoded": idDecoded, "isCompleted": false, "downloadLink": null}
   const result = await conn.insertOne(data)
 
@@ -314,6 +284,16 @@ app.post("/newExportJob", async (req, res) => {
 
 app.get("/getJobStatus/:id", async (req, res) => {
   // query the mongodb database for the job
+
+  const id = req.params.page
+  if (!id || id == null || id == "" || id == undefined) {
+    return res.send(400)
+  }
+
+  const conn = await connect.initCustom("batchJobs")
+  const result = await conn.find({_id: new ObjectId(id)}).toArray()
+
+  return res.json({"results": result})
 })
 
 /* ADMIN FUNCTIONS */
@@ -327,7 +307,7 @@ app.post("/cleanDatabase", async (req, res) => {
     return res.status(401).send("unauthorized")
   }
 
-  const conn = await init();
+  const conn = await connect.init();
 
   /* Collect items with duplicate Lightbox ID */
   const duplicates = await conn.aggregate([
