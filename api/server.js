@@ -285,13 +285,18 @@ app.post("/newExportJob", async (req, res) => {
 app.get("/getJobStatus/:id", async (req, res) => {
   // query the mongodb database for the job
 
-  const id = req.params.page
+  const id = req.params.id
   if (!id || id == null || id == "" || id == undefined) {
     return res.send(400)
   }
 
   const conn = await connect.initCustom("batchJobs")
-  const result = await conn.find({_id: new ObjectId(id)}).toArray()
+  var result = null
+  try {
+    result = await conn.find({_id: new ObjectId(id)}).toArray()
+  } catch(error) {
+    return res.sendStatus(400).json({"error": true, "message": "invalid ID"})
+  }
 
   return res.json({"results": result})
 })
