@@ -1,10 +1,8 @@
-function checkForJobs() {
-  console.log("Checking for new jobs...");
+const connect = require("./connect.js")
+const { setIntervalAsync, clearIntervalAsync } = require('set-interval-async');
 
-  // database lookup and PDF export done here
-  // upload to cloudflare too
-}
-
-const interval = 10000; // 10 seconds in milliseconds
-
-setInterval(checkForJobs, interval);
+const timer = setIntervalAsync(async () => {
+  console.log('Hello')
+  await connect.init()
+  console.log('Bye')
+}, 1000);
