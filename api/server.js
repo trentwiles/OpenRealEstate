@@ -276,7 +276,7 @@ app.post("/newExportJob", async (req, res) => {
   // no captcha for now, future?
 
   const conn = await connect.initCustom("batchJobs")
-  const data = {"idDecoded": idDecoded, "isCompleted": false, "downloadLink": null}
+  const data = {"idDecoded": idDecoded, "isCompleted": false, "downloadLink": null, "internalPath": null, "requestedAt": Math.floor(Date.now() / 1000)}
   const result = await conn.insertOne(data)
 
   console.log(result)

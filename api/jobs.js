@@ -61,7 +61,7 @@ async function manageBatchJobs(input) {
       console.log('PDF created:', res);
   });
 
-  return urlFilePath
+  return {"url": urlFilePath, "filePath": filePath}
 }
 
 async function updateCompleted(input, downloadLink) {
@@ -69,7 +69,7 @@ async function updateCompleted(input, downloadLink) {
   const conn = await connect.initCustom("batchJobs");
   await conn.updateOne(
     { "_id": input["_id"] },
-    { $set: { "downloadLink": downloadLink, "isCompleted": true } }
+    { $set: { "downloadLink": downloadLink["url"], "isCompleted": true, "internalPath": downloadLink["filePath"] } }
   );
 }
 
