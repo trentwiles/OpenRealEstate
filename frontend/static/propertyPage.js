@@ -3,6 +3,23 @@ function parseURL() {
     var spl = url.pathname.split("/")
     return spl[2];
 }
+
+function exportPDF() {
+  var data = {
+    "id": parseURL()
+  }
+
+  $.ajax({
+    url: `${API_URL}/newBatchJob`,
+    type: "POST",
+    data: JSON.stringify(data),
+    contentType: "application/json",
+    dataType: "json",
+    success: function (data, status) {
+    }
+  })
+}
+
 var data = {"id": parseURL()}
 
 $(document).ready(function () {
@@ -137,6 +154,7 @@ $(document).ready(function () {
 
             </div>
           </div>
+          <button id="export" onclick="exportPDF()" class="button is-info">Export to PDF</button>
         </section>
         `
         $("#infoDetailsHolder").append(bodyTask)
