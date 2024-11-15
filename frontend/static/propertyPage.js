@@ -1,13 +1,13 @@
 function parseURL() {
-    const url = new URL(window.document.location + "");
-    var spl = url.pathname.split("/")
-    return spl[2];
+  const url = new URL(window.document.location + "");
+  var spl = url.pathname.split("/");
+  return spl[2];
 }
 
 function exportPDF() {
   var data = {
-    "id": parseURL()
-  }
+    id: parseURL(),
+  };
 
   $.ajax({
     url: `${API_URL}/newBatchJob`,
@@ -16,11 +16,23 @@ function exportPDF() {
     contentType: "application/json",
     dataType: "json",
     success: function (data, status) {
-    }
-  })
+      var jobID = data["jobID"];
+      $.get({
+        url: `${API_URL}/getJobStatus/${jobID}`,
+        success: function (data, status) {
+          // Loop here
+          // While the job completion is false, send request every few seconds
+        },
+      });
+    },
+    error: function (xhr) {
+      $("#export").text("Unable to Export");
+      $("#export").prop("disabled", true);
+    },
+  });
 }
 
-var data = {"id": parseURL()}
+var data = { id: parseURL() };
 
 $(document).ready(function () {
   $.ajax({
@@ -31,26 +43,26 @@ $(document).ready(function () {
     dataType: "json",
     success: function (data, status) {
       if (status === "success") {
-        if(data["results"].length == 0) {
+        if (data["results"].length == 0) {
           // temp fix
-          alert("404")
-          return
+          alert("404");
+          return;
         }
         /* ===============
         DEFINED VARIABLES
         ================ */
-        const api = data["results"][0]
+        const api = data["results"][0];
 
-        const yearBuilt = api["yearBuilt"] || "Unknown"
-        const acres = Math.round(api["landSize"]/4046.8564224) + " acres"
-        const fullAddress = api["streetAddress"] || "No Listed Address"
-        const town = api["streetAddressDetails"]["town"] || "Unknown"
-        const state = api["streetAddressDetails"]["state"] || "Unknown"
-        const zip = api["streetAddressDetails"]["zip"] || "Unknown"
-        const taxes = api["taxes"] || "Unlisted"
-        const taxYear = api["taxYear"] || "Unknown"
-        const taxExempt = api["taxExemption"] || "None"
-        const latestSale = api["verboseTransaction"]["lastMarketSale"]
+        const yearBuilt = api["yearBuilt"] || "Unknown";
+        const acres = Math.round(api["landSize"] / 4046.8564224) + " acres";
+        const fullAddress = api["streetAddress"] || "No Listed Address";
+        const town = api["streetAddressDetails"]["town"] || "Unknown";
+        const state = api["streetAddressDetails"]["state"] || "Unknown";
+        const zip = api["streetAddressDetails"]["zip"] || "Unknown";
+        const taxes = api["taxes"] || "Unlisted";
+        const taxYear = api["taxYear"] || "Unknown";
+        const taxExempt = api["taxExemption"] || "None";
+        const latestSale = api["verboseTransaction"]["lastMarketSale"];
 
         const generalInfo = `
         <table class="table is-fullwidth is-striped">
@@ -61,7 +73,9 @@ $(document).ready(function () {
             </tr>
             <tr>
               <th>Price</th>
-              <td>${latestSale["value"] ? `$${latestSale["value"]}` : "Unknown"}</td>
+              <td>${
+                latestSale["value"] ? `$${latestSale["value"]}` : "Unknown"
+              }</td>
             </tr>
             <tr>
               <th>Bedrooms</th>
@@ -85,7 +99,7 @@ $(document).ready(function () {
             </tr>
           </tbody>
         </table>
-        `
+        `;
 
         const latestSaleTable = `
         <table class="table">
@@ -104,14 +118,28 @@ $(document).ready(function () {
               <td>${latestSale["seller"] || "Unknown"}</td>
               <td>${latestSale["buyer"] || "Unknown"}</td>
               <!-- adds $ if non-null -->
-              <td>${latestSale["value"] ? `$${latestSale["value"]}` : "Unknown"}</td>
-              <td>${latestSale["filingDate"] ? new Date(latestSale["filingDate"]).toLocaleDateString('en-US') : 'No date available'}</td>
-              <td>${latestSale["filingDate"] ? new Date(latestSale["transferDate"]).toLocaleDateString('en-US') : 'No date available'}</td>
+              <td>${
+                latestSale["value"] ? `$${latestSale["value"]}` : "Unknown"
+              }</td>
+              <td>${
+                latestSale["filingDate"]
+                  ? new Date(latestSale["filingDate"]).toLocaleDateString(
+                      "en-US"
+                    )
+                  : "No date available"
+              }</td>
+              <td>${
+                latestSale["filingDate"]
+                  ? new Date(latestSale["transferDate"]).toLocaleDateString(
+                      "en-US"
+                    )
+                  : "No date available"
+              }</td>
               <td>${latestSale["lender"] || "Unknown"}</td>
             </tr>
           <tbody>
         </table>
-        `
+        `;
 
         const bodyTask = `
                 
@@ -156,14 +184,14 @@ $(document).ready(function () {
           </div>
           <button id="export" onclick="exportPDF()" class="button is-info">Export to PDF</button>
         </section>
-        `
-        $("#infoDetailsHolder").append(bodyTask)
-      }else{
+        `;
+        $("#infoDetailsHolder").append(bodyTask);
+      } else {
         // 404 or other error handling
       }
     },
     error: function (xhr) {
       $("#body").html(OFFLINE);
-    }
+    },
   });
 });
