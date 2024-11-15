@@ -9,21 +9,40 @@ function exportPDF() {
     id: parseURL(),
   };
 
+  $("#export").text("Exporting...")
+  $("#export").prop("disabled", true);
+
   $.ajax({
-    url: `${API_URL}/newBatchJob`,
+    url: `${API_URL}/newExportJob`,
     type: "POST",
     data: JSON.stringify(data),
     contentType: "application/json",
     dataType: "json",
     success: function (data, status) {
       var jobID = data["jobID"];
-      $.get({
-        url: `${API_URL}/getJobStatus/${jobID}`,
-        success: function (data, status) {
-          // Loop here
-          // While the job completion is false, send request every few seconds
-        },
-      });
+      
+      // Function to check the job status
+      function checkJobStatus() {
+        $.get({
+          url: `${API_URL}/getJobStatus/${jobID}`,
+          success: function (jdata) {
+            if (jdata["isCompleted"]) {
+              // Job is complete, show the download link
+              $("#export").text("Done!")
+              alert(jdata["downloadLink"]);
+            } else {
+              // Job is not complete, check again in 3 seconds
+              setTimeout(checkJobStatus, 1500);
+            }
+          },
+          error: function () {
+            alert("Error checking job status. Please try again later.");
+          },
+        });
+      }
+      
+      // Start checking the job status
+      checkJobStatus();
     },
     error: function (xhr) {
       $("#export").text("Unable to Export");
@@ -31,6 +50,7 @@ function exportPDF() {
     },
   });
 }
+
 
 var data = { id: parseURL() };
 
