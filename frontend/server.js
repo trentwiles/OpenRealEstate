@@ -6,6 +6,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname + '/static'));
+app.use('/uploads', express.static(path.join(__dirname, '../api/tmp')));
 
 app.get("/", async (req, res) => {
   res.render('home', { title: "Home" })

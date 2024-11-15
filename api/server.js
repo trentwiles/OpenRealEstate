@@ -279,7 +279,7 @@ app.post("/newExportJob", async (req, res) => {
   const data = {"idDecoded": idDecoded, "isCompleted": false, "downloadLink": null}
   const result = await conn.insertOne(data)
 
-  return {"success": true, "jobID": result.insertedId}
+  return res.json({"success": true, "jobID": result.insertedId})
 })
 
 app.get("/getJobStatus/:id", async (req, res) => {
@@ -295,10 +295,31 @@ app.get("/getJobStatus/:id", async (req, res) => {
   try {
     result = await conn.find({_id: new ObjectId(id)}).toArray()
   } catch(error) {
-    return res.sendStatus(400).json({"error": true, "message": "invalid ID"})
+    return res.status(404).json({
+      "message": "job not found"
+    })
   }
 
-  return res.json({"results": result})
+  var formattedResult;
+  var status;
+
+  try{
+    status = 200
+    formattedResult = {
+      "isCompleted": result[0]["isCompleted"],
+      "downloadLink": result[0]["downloadLink"]
+    };
+  }catch{
+    status = 404
+    formattedResult = {
+      "message": "job not found"
+    }
+  }
+  
+
+  console.log(formattedResult)
+  
+  return res.status(status).json(formattedResult)
 })
 
 /* ADMIN FUNCTIONS */
