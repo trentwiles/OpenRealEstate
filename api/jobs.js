@@ -1,7 +1,7 @@
 const connect = require("./connect.js")
 const { setIntervalAsync, clearIntervalAsync } = require('set-interval-async');
 const pdf = require('html-pdf');
-const { ObjectID } = require("mongoose")
+const { ObjectId } = require('mongodb');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const path = require('path');
@@ -17,9 +17,17 @@ function ensureDirSync(dirPath) {
 }
 
 async function manageBatchJobs(input) {
-  const html = `
-  <h1>test</h1>
-  `
+  const conn2 = await connect.init()
+  const data = await conn2.find({"_id": new ObjectId(input["idDecoded"])}).toArray()
+
+  var html = ""
+
+  if(data.length == 0) {
+    html = "<i>404: Property Not Found</i>"
+  }else{
+    var api = data[0]
+    html = `<h2>${api["streetAddress"]}</h2>`
+  }
 
   const options = {
       format: 'A4',

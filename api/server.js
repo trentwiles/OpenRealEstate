@@ -279,6 +279,7 @@ app.post("/newExportJob", async (req, res) => {
   const data = {"idDecoded": idDecoded, "isCompleted": false, "downloadLink": null}
   const result = await conn.insertOne(data)
 
+  console.log(result)
   return res.json({"success": true, "jobID": result.insertedId})
 })
 
