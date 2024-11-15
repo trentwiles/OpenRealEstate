@@ -6,12 +6,14 @@
 
 ## API Docs
 
-| Paths         | Link                        |
-| ------------- | --------------------------- |
-| GET /         | [Documentation](#/)         |
-| POST /search  | [Documentation](#/search)   |
-| GET /property | [Documentation](#/property) |
-| GET /random   | [Documentation](#/random)   |
+| Paths                  | Link                                 |
+| ---------------------- | ------------------------------------ |
+| GET /                  | [Documentation](#/)                  |
+| POST /search           | [Documentation](#/search)            |
+| GET /property          | [Documentation](#/property)          |
+| GET /random            | [Documentation](#/random)            |
+| POST /newBatchJob      | [Documentation](#/newBatchJob)       |
+| GET /getJobStatus/<id> | [Documentation](#/getJobStatus/<id>) |
 
 ### /
 
