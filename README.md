@@ -389,3 +389,50 @@ GET /random?limit=3
   ]
 }
 ```
+
+### /newExportJob
+
+Description: add a new PDF export job to the queue. Returns the ID of the job once it has been created.
+
+Parameters:
+| Parameter | Description | Example |
+| ---------------- | ----------------------------------------------------------------------------------- | ------------------------- |
+| id | Property ID (found under frontend url /p/<id>) | `NjczMTY3YWQxOTc5OGU1MDM3MDY0NmMy` |
+
+```
+POST /newExportJob
+
+{"id": "NjczMTY3YWQxOTc5OGU1MDM3MDY0NmMy"}
+
+{
+  "success": true,
+  "jobID": "67376e3f58f0fef9582a473a"
+}
+```
+
+### /getJobStatus/<id>
+
+Get progress update on a PDF export job.
+
+Parameters:
+| Parameter | Description | Example |
+| ---------------- | ----------------------------------------------------------------------------------- | ------------------------- |
+| id | Job ID (returned from /newExportJob) | `6736da103c511a7b978650a9` |
+
+```
+GET /getJobStatus/6736da103c511a7b978650a9
+
+# In-progress example:
+
+{
+  "isCompleted": false,
+  "downloadLink": null
+}
+
+# Completed Example
+
+{
+  "isCompleted": true,
+  "downloadLink": "http://localhost:3001/uploads/2024/11/15/3c50b6ee-d105-47af-b247-587eeb2b4a61.pdf"
+}
+```
