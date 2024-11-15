@@ -2,7 +2,12 @@
 
 ## To Do
 
-- Assign more resources to MongoDB
+- Style exported PDF
+- PDF cleaning function (delete PDFs created after x hours)
+- Street View Images
+- Google Gemini Integration
+- Style property page
+- Search by town, using same template as search by last name
 
 ## API Docs
 
