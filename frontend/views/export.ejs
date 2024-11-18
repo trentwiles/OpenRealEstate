@@ -1,0 +1,64 @@
+<%- include('partials/header') %>
+<!-- BULK EXPORT -->
+<!-- I'm envisioning this to look like a form that is filled out -->
+<section class="section">
+    <div class="container">
+      <h1 class="title">Form Example</h1>
+      <form action="#" method="POST">
+        <!-- Name Field -->
+        <div class="field">
+          <label class="label" for="name">Name</label>
+          <div class="control">
+            <input class="input" type="text" id="name" name="name" placeholder="Enter your name" required>
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="field">
+          <label class="label" for="email">Email</label>
+          <div class="control">
+            <input class="input" type="email" id="email" name="email" placeholder="Enter your email" required>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="field">
+          <label class="label" for="password">Password</label>
+          <div class="control">
+            <input class="input" type="password" id="password" name="password" placeholder="Enter your password" required>
+          </div>
+        </div>
+
+        <!-- Dropdown -->
+        <div class="field">
+          <label class="label" for="role">Role</label>
+          <div class="control">
+            <div class="select">
+              <select id="role" name="role">
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
+                <option value="viewer">Viewer</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkbox -->
+        <div class="field">
+          <div class="control">
+            <label class="checkbox">
+              <input type="checkbox" id="terms" name="terms" required>
+              I agree to the <a href="#">terms and conditions</a>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <button class="button is-primary" type="submit">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+<%- include('partials/footer') %>
