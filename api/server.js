@@ -270,6 +270,25 @@ app.get("/last-names/:page", async (req, res) => {
   return res.json(results);
 });
 
+app.get("/town-names/:page", async (req, res) => {
+  var page = parseInt(req.params.page);
+  var pageSize = 10;
+
+  if (page < 1) {
+    return res.json({ error: true, message: "'page' is too small" });
+  }
+
+  const conn = await connect.initCustom("townNames");
+  const results = await conn
+    .find({}, { projection: { _id: 0 } })
+    .sort({ townName: 1 })
+    .skip(pageSize * (page - 1))
+    .limit(pageSize)
+    .toArray();
+
+  return res.json(results);
+});
+
 /* PDF EXPORT FUNCTIONS */
 /* Includes job creation, job updates, and job completion */
 app.post("/newExportJob", async (req, res) => {
@@ -440,6 +459,31 @@ app.get("/stats", async (req, res) => {
   res.setHeader('X-Cache', 'MISS');
   return res.json({ total: count });
 });
+
+app.post("/generateTownList", async (req, res) => {
+  if (req.body["key"] != process.env.ADMIN_TOKEN) {
+    logger.warn("Unauthorized login attempt on admin method 'wipeDatabase'");
+    return res.status(401).send("unauthorized");
+  }
+
+  const conn = await connect.init()
+  const result = await conn.distinct("streetAddressDetails.town")
+
+  const townConn = await connect.initCustom("townNames")
+
+  // first delete everything
+  await townConn.deleteMany({})
+
+  result.forEach((town) => {
+    townConn.insertOne({"townName": town})
+  })
+
+  return res.json({})
+})
+
+/*
+  Missing: last names method...
+*/
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");

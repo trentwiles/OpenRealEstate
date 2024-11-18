@@ -19,6 +19,7 @@
 | GET /random            | [Documentation](#/random)            |
 | POST /newBatchJob      | [Documentation](#/newBatchJob)       |
 | GET /getJobStatus/<id> | [Documentation](#/getJobStatus/<id>) |
+| GET /stats             | [Documentation](#/stats)             |
 
 ### /
 
@@ -443,3 +444,7 @@ GET /getJobStatus/6736da103c511a7b978650a9
   "downloadLink": "http://localhost:3001/uploads/2024/11/15/3c50b6ee-d105-47af-b247-587eeb2b4a61.pdf"
 }
 ```
+
+### /stats
+
+Returns basic statistics about the real estate data. Data is cached for 12 hours, and is saved in `cache.json` under the API folder.
