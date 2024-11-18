@@ -20,6 +20,8 @@
 | POST /newBatchJob      | [Documentation](#/newBatchJob)       |
 | GET /getJobStatus/<id> | [Documentation](#/getJobStatus/<id>) |
 | GET /stats             | [Documentation](#/stats)             |
+| GET /last-names/<page> | [Documentation](#/last-names)        |
+| GET /town-names<page>  | [Documentation](#/town-names)        |
 
 ### /
 
@@ -448,3 +450,85 @@ GET /getJobStatus/6736da103c511a7b978650a9
 ### /stats
 
 Returns basic statistics about the real estate data. Data is cached for 12 hours, and is saved in `cache.json` under the API folder.
+
+### /last-names/<page>
+
+Returns the list of unique last names across the state, sorted alphabetically. A page contains 10 last names. Page count starts at 1.
+
+```
+GET /last-names/12384
+
+[
+  {
+    "lastName": "SHLOSSER"
+  },
+  {
+    "lastName": "SHMAD"
+  },
+  {
+    "lastName": "SHMAYS"
+  },
+  {
+    "lastName": "SHMELZER"
+  },
+  {
+    "lastName": "SHMERKOVICH"
+  },
+  {
+    "lastName": "SHMERLING"
+  },
+  {
+    "lastName": "SHMUKLER"
+  },
+  {
+    "lastName": "SHMULEVICH"
+  },
+  {
+    "lastName": "SHMULSKY"
+  },
+  {
+    "lastName": "SHMYGLA"
+  }
+]
+```
+
+### /town-names/<page>
+
+Returns the list of unique town names across the state, sorted alphabetically. A page contains 10 town names. Page count starts at 1.
+
+```
+GET /town-names/4
+
+[
+  {
+    "townName": "Barnstable"
+  },
+  {
+    "townName": "Barre"
+  },
+  {
+    "townName": "Becket"
+  },
+  {
+    "townName": "Bedford"
+  },
+  {
+    "townName": "Belchertown"
+  },
+  {
+    "townName": "Bellingham"
+  },
+  {
+    "townName": "Belmont"
+  },
+  {
+    "townName": "Berkley"
+  },
+  {
+    "townName": "Berlin"
+  },
+  {
+    "townName": "Bernardston"
+  }
+]
+```
