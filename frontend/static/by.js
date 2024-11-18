@@ -7,10 +7,11 @@ function load(api_path, indexName, page) {
     $("#appendHere").empty()
     $.get(`${API_URL}/${api_path}/${page}`, function (data) {
         data.forEach(element => {
-            if(element[indexName] != null) {
+            console.table(element)
+            if(element[indexName] != null || element[indexName] != undefined) {
                 const html = `
                 <div class="column is-one-third">
-                    <a href="/search?lastName=${encodeURIComponent(element.lastName)}">${element.lastName}</a>
+                    <a href="/search?${indexName}=${encodeURIComponent(element[indexName])}">${element[indexName]}</a>
                 </div>
                 `
                 $("#appendHere").append(html)
@@ -34,10 +35,10 @@ $(document).ready(function () {
         case "by-town":
             // api response will look like:
             /**
-             * [{"town":"Boston"},{"town":"Uxbridge"}...]
+             * [{"townName":"Boston"},{"townName":"Uxbridge"}...]
              */
-            api_route = "by-town"
-            indexName = "town"
+            api_route = "town-names"
+            indexName = "townName"
             load(api_route, indexName, 1)
             break;
         case "by-last-name":

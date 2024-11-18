@@ -121,3 +121,23 @@ test("valid search, taxes", async () => {
   expect(http.data.results.length).toBe(4);
   expect(http.data.results[0].taxes > 10000).toBe(false);
 }, 20000);
+
+test("valid last names query, between 1-100", async () => {
+  const http = await axios({
+    method: "get",
+    url: `${BASE_API_URL}/last-names/${Math.floor((Math.random() * 100) + 1)}`,
+    headers: { Accept: "application/json" },
+  });
+  expect(http.status).toBe(200);
+  expect(http.data.length).toBe(10);
+})
+
+test("valid town name query, between 1-10", async () => {
+  const http = await axios({
+    method: "get",
+    url: `${BASE_API_URL}/town-names/${Math.floor((Math.random() * 10) + 1)}`,
+    headers: { Accept: "application/json" },
+  });
+  expect(http.status).toBe(200);
+  expect(http.data.length).toBe(10);
+})
