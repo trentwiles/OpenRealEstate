@@ -67,9 +67,10 @@ async function manageBatchJobs(input) {
     footer: {
       height: "20mm",
       contents: {
-        default: "Example Footer Change Later",
+        default: "insert domain name here",
       },
     },
+    // fixes an export issue on linux
     childProcessOptions: {
       env: {
         OPENSSL_CONF: "/dev/null",

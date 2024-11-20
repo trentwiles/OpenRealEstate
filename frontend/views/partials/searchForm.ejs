@@ -1,0 +1,103 @@
+<!-- Advanced Search Tool in Bulma, used for /search and /export -->
+<section class="section">
+    <div class="container">
+        <h1 class="title">Advanced Search</h1>
+        <div class="box">
+            <form id="advanced-search-form">
+                <!-- Keyword Search -->
+                <div class="field">
+                    <label class="label">Land Use Keyword</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Vacant" name="landUse" id="landUse">
+                    </div>
+                </div>
+
+                <!-- Keyword Search -->
+                <div class="field">
+                    <label class="label">Owner Name Keyword</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Vacant" name="owner" id="owner">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">City</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Oakland" name="town" id="town">
+                    </div>
+                </div>
+
+                <!-- Date Range -->
+                <div class="field is-grouped">
+                    <div class="control">
+                        <label class="label">Build Year - Start Date</label>
+                        <input class="input" type="date" name="startDate" id="startDate" name="yearStartDate">
+                    </div>
+                    <div class="control">
+                        <label class="label">Build Year - End Date</label>
+                        <input class="input" type="date" name="endDate" id="endDate" name="yearEndDate">
+                    </div>
+                </div>
+
+                <!-- Price Range Slider -->
+                <div class="field">
+                    <label class="label">Price Range</label>
+                    <div class="control">
+                        <input class="input" type="range" min="0" max="1000000" step="100" id="minPriceSlider"
+                            name="minPrice" oninput="updatePriceRange()">
+                        <input class="input" type="range" min="0" max="1000000" step="100" id="maxPriceSlider"
+                            name="maxPrice" oninput="updatePriceRange()">
+                    </div>
+                    <p class="help">Adjust sliders to set minimum and maximum price.</p>
+                </div>
+
+                <p>Sale Price Range: <span id="priceDisplayMin">$0</span> - <span id="priceDisplayMax">$1,000,000</span>
+                </p>
+                <br>
+
+                <script>
+                    function updatePriceRange() {
+                        const minSlider = document.getElementById('minPriceSlider');
+                        const maxSlider = document.getElementById('maxPriceSlider');
+                        const minDisplay = document.getElementById('priceDisplayMin');
+                        const maxDisplay = document.getElementById('priceDisplayMax');
+
+                        // Prevent min slider from exceeding max slider value and vice versa
+                        if (parseInt(minSlider.value) > parseInt(maxSlider.value)) {
+                            minSlider.value = maxSlider.value;
+                        } else if (parseInt(maxSlider.value) < parseInt(minSlider.value)) {
+                            maxSlider.value = minSlider.value;
+                        }
+
+                        // Format the min and max values as currency
+                        const formattedMinPrice = new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                            minimumFractionDigits: 0
+                        }).format(minSlider.value);
+
+                        const formattedMaxPrice = new Intl.NumberFormat('en-US', {
+                            style: 'currency',
+                            currency: 'USD',
+                            minimumFractionDigits: 0
+                        }).format(maxSlider.value);
+
+                        // Update the displayed price range
+                        minDisplay.textContent = formattedMinPrice;
+                        maxDisplay.textContent = formattedMaxPrice;
+                    }
+                </script>
+
+                <!-- Submit and Reset Buttons -->
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link" type="submit" id="submitButton">Search</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-light" type="reset">Reset</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

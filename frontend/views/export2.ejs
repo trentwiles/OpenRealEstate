@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Bulk Data Export</h1>
+            <p>We've collected your email, <code><span id="email"></span></code>. Specify what data you would like.</p>
+        </div>
+    </section>
+    <%- include('partials/searchForm') %>
+    <script>
+        $(document).ready(function() {
+            $("#email").html(localStorage.getItem("email"))
+
+            $('#emailSubmit').click(function(event) {
+                event.preventDefault()
+                // send data to backend
+
+                // redirect when done
+
+                // consider moving this javascript to a .js file under static?
+            });
+        });
+    </script>
+<%- include('partials/footer') %>

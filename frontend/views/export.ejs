@@ -3,17 +3,10 @@
 <!-- I'm envisioning this to look like a form that is filled out -->
 <section class="section">
     <div class="container">
-      <h1 class="title">Form Example</h1>
+      <h1 class="title">Bulk Data Export</h1>
+      <p>Export up to 10,000 properties in CSV form</p>
       <form action="#" method="POST">
-        <!-- Name Field -->
-        <div class="field">
-          <label class="label" for="name">Name</label>
-          <div class="control">
-            <input class="input" type="text" id="name" name="name" placeholder="Enter your name" required>
-          </div>
-        </div>
 
-        <!-- Email Field -->
         <div class="field">
           <label class="label" for="email">Email</label>
           <div class="control">
@@ -21,29 +14,7 @@
           </div>
         </div>
 
-        <!-- Password Field -->
-        <div class="field">
-          <label class="label" for="password">Password</label>
-          <div class="control">
-            <input class="input" type="password" id="password" name="password" placeholder="Enter your password" required>
-          </div>
-        </div>
-
-        <!-- Dropdown -->
-        <div class="field">
-          <label class="label" for="role">Role</label>
-          <div class="control">
-            <div class="select">
-              <select id="role" name="role">
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
-                <option value="viewer">Viewer</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Checkbox -->
+        
         <div class="field">
           <div class="control">
             <label class="checkbox">
@@ -55,10 +26,18 @@
 
         <div class="field">
           <div class="control">
-            <button class="button is-primary" type="submit">Submit</button>
+            <button class="button is-primary" type="submit" id="emailSubmit">Next</button>
           </div>
         </div>
       </form>
     </div>
   </section>
+  <script>
+    $(document).ready(function() {
+        $('#emailSubmit').click(function(event) {
+          // html already validates email for us, no need to validate again
+          localStorage.setItem("email", $("#email").val());
+        });
+    });
+  </script>
 <%- include('partials/footer') %>

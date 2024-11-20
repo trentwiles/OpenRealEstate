@@ -24,6 +24,18 @@ app.get("/list/:by/", async (req, res) => {
   res.render("by.ejs")
 })
 
+app.get("/export", async (req, res) => {
+  res.render("export")
+})
+
+app.post("/export", async (req, res) => {
+  // this page displays after the user has POSTed their email
+  // frontend should record email in localstorage, this is
+  // simply here for control flow, nothing is actually POSTed
+  // to backend
+  res.render("export2")
+})
+
 app.listen(3001, () => {
   console.log("Server is running on http://localhost:3001");
 });
