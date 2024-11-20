@@ -99,6 +99,14 @@ function addPropertyBox(input) {
 }
 
 $(document).ready(function () {
+  $.get(`${API_URL}/stats`, function (data, status) {
+    if (status == "success") {
+      $("#count").html(new Intl.NumberFormat('en-US').format(data.total))
+    }
+  })
+  .fail(function (xhr, status, error) {
+    $("#body").html(OFFLINE)
+  });
   $.get(`${API_URL}/random?limit=3`, function (data, status) {
     if (status == "success") {
       addPropertyBox(data["results"][0])

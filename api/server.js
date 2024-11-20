@@ -307,6 +307,7 @@ app.post("/newExportJob", async (req, res) => {
     isCompleted: false,
     downloadLink: null,
     internalPath: null,
+    ipAddress: req.ip,
     requestedAt: Math.floor(Date.now() / 1000),
   };
   const result = await conn.insertOne(data);
@@ -484,6 +485,32 @@ app.post("/generateTownList", async (req, res) => {
 /*
   Missing: last names method...
 */
+
+/* ==============================================
+                    Export Methods
+  Idea behind exporting: make a call to the /search
+  method, and then export the results of that to
+  CSV and PDF files.
+ ==================================================*/
+
+function limitHelper(limit) {
+  // validate limit, for bulk export it is unlimited
+  if (limit == undefined || limit == null) {
+    return -1
+  }
+}
+
+app.post("/bulkExport", async (req, res) => {
+  limit = req.body.limit
+
+  const query = queryBuilder(req.body);
+
+  if (query["error"] != null) {
+    return res.status(400).json(query);
+  }
+  
+  return res.send("")
+})
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");

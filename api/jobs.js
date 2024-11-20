@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const path = require("path");
 
+// builds the date directory under tmp if not already created
 function ensureDirSync(dirPath) {
   const segments = dirPath.split(path.sep);
   for (let i = 1; i <= segments.length; i++) {
@@ -14,6 +15,15 @@ function ensureDirSync(dirPath) {
       fs.mkdirSync(dir);
     }
   }
+}
+
+function generateRow(key, value) {
+  return `
+  <tr>
+    <td>${key}</td>
+    <td>${value}</td>
+  </tr>
+  `
 }
 
 async function manageBatchJobs(input) {
@@ -28,7 +38,23 @@ async function manageBatchJobs(input) {
     html = "<i>404: Property Not Found</i>";
   } else {
     var api = data[0];
-    html = `<h2>${api["streetAddress"]}</h2>`;
+    /*
+    TODO: Complete this PDF export!!!
+    Additionally, add null checks!
+    */
+    html = `
+    <center>
+    <table>
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+      ${generateRow("Street Address", api["streetAddress"])}
+      ${generateRow("Property Taxes", api["taxes"] + '(' + api["taxYear"] + ')')}
+    </table>
+    <i>Exported at ${new Date()} from IP address ${input["ipAddress"]}</i>
+    </center>
+    `;
   }
 
   const options = {
